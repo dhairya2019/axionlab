@@ -1,4 +1,3 @@
-
 import React from "react";
 
 export default function Philosophy() {
@@ -29,10 +28,38 @@ export default function Philosophy() {
           ))}
         </div>
 
-        <div className="mt-48 bg-surface p-12 md:p-32 border border-white/10">
-          <p className="text-2xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase max-w-5xl">
-            We remain anonymous. Our work is the interface. We speak through the systems we deploy and the infrastructure we stabilize.
-          </p>
+        {/* Refined Stealth Protocol Section - oriented for clarity */}
+        <div className="mt-48 grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24 border border-white/10 p-8 md:p-24 bg-surface relative group">
+          <div className="lg:col-span-8 flex flex-col justify-center space-y-12">
+            <div className="space-y-4">
+              <span className="font-mono text-[9px] text-accent uppercase tracking-[0.6em] font-black block">Status: Stealth Protocol</span>
+              <p className="text-4xl md:text-7xl font-black leading-[0.85] tracking-tighter uppercase text-white">
+                We remain anonymous. <br /> Our work is the interface.
+              </p>
+            </div>
+            <p className="text-muted text-lg md:text-xl uppercase font-bold tracking-tight leading-tight max-w-3xl">
+              Infrastructure should be felt, not seen. By maintaining a profile of absolute discretion, we ensure the focus remains entirely on the performance and integrity of the systems we stabilize.
+            </p>
+          </div>
+          
+          <div className="lg:col-span-4 flex flex-col justify-between pt-12 lg:pt-0 lg:border-l lg:border-white/10 lg:pl-24 space-y-12">
+            <div className="space-y-4">
+              <p className="text-[10px] text-muted uppercase tracking-[0.4em] font-black border-b border-white/10 pb-4">Operational Mandate</p>
+              <p className="text-sm font-bold text-white uppercase tracking-widest leading-relaxed">
+                We speak through the systems we deploy and the infrastructure we stabilize. No personal brands. No visibility tiers.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-8">
+              <div className="space-y-1">
+                <p className="text-[9px] text-muted uppercase tracking-[0.3em] font-black">Visibility</p>
+                <p className="text-[11px] font-bold text-white uppercase tracking-widest">Zero</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[9px] text-muted uppercase tracking-[0.3em] font-black">Performance</p>
+                <p className="text-[11px] font-bold text-white uppercase tracking-widest">Critical</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

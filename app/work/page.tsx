@@ -47,8 +47,9 @@ export default function Work() {
       overview: "Real-time retail intelligence and point-of-sale ecosystem.",
       challenge: "Ingestion and parsing of fragmented legacy ERP data into actionable BI layers.",
       architecture: "Rust Parser / PostgreSQL / Real-time Analytics Dashboard",
-      execution: "Implemented sub-50ms ingestion protocol for multi-location data synchronization.",
-      outcome: "Real-time stock forecasting across 40+ physical retail hubs."
+      execution: "Implemented sub-50ms ingestion protocol for multi-location data synchronization. Developed in partnership with Microtech LLC.",
+      outcome: "Real-time stock forecasting across 40+ physical retail hubs.",
+      link: "https://metapos.net"
     }
   ];
 
@@ -62,8 +63,18 @@ export default function Work() {
       <div className="space-y-48 md:space-y-72">
         {projects.map((project, i) => (
           <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-16 relative">
-            <div className="md:col-span-12">
+            <div className="md:col-span-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <h2 className="text-6xl sm:text-8xl lg:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase">{project.name}</h2>
+              {project.link && (
+                <a 
+                  href={project.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-4 text-accent text-[11px] font-black uppercase tracking-[0.4em] mb-4 hover:text-white transition-colors"
+                >
+                  Visit Node <span className="text-lg">↗</span>
+                </a>
+              )}
             </div>
             
             <div className="md:col-span-4 space-y-16">
@@ -88,7 +99,14 @@ export default function Work() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
                 <div>
                   <h3 className="text-[10px] text-accent font-bold uppercase tracking-widest mb-6">Execution</h3>
-                  <p className="text-muted leading-snug text-sm uppercase font-medium">{project.execution}</p>
+                  <p className="text-muted leading-snug text-sm uppercase font-medium">
+                    {project.execution}
+                    {project.name === "MetaPOS" && (
+                      <span className="block mt-4 text-white/50">
+                        *Backed by <a href="https://metapos.net" className="underline hover:text-accent">Microtech LLC</a>
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div>
                   <h3 className="text-[10px] text-accent font-bold uppercase tracking-widest mb-6">Outcome</h3>
