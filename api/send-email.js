@@ -1,4 +1,3 @@
-
 import sgMail from '@sendgrid/mail';
 
 export default async function handler(req, res) {
@@ -19,6 +18,7 @@ export default async function handler(req, res) {
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+  // Email to the agency (Support)
   const agencyMsg = {
     to: 'support@axionlab.in',
     from: 'support@axionlab.in',
@@ -26,31 +26,42 @@ export default async function handler(req, res) {
     subject: `New Axion Lab Inquiry from ${email}`,
     text: message,
     html: `
-      <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
-        <h2 style="color: #4f46e5; margin-bottom: 20px;">New Inquiry Received</h2>
-        <p style="color: #64748b; font-size: 14px;"><strong>From:</strong> ${email}</p>
-        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; color: #1e293b; line-height: 1.6;">
-          ${message.replace(/\n/g, '<br>')}
+      <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 0px;">
+        <h2 style="color: #ff1f3d; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.04em;">New System Initiation</h2>
+        <p style="color: #64748b; font-size: 14px;"><strong>Source Node:</strong> ${email}</p>
+        <div style="background-color: #0e0e0e; padding: 25px; color: #ffffff; line-height: 1.6; border-left: 4px solid #ff1f3d;">
+          <pre style="white-space: pre-wrap; font-family: monospace; margin: 0;">${message}</pre>
         </div>
-        <p style="margin-top: 20px; font-size: 12px; color: #94a3b8;">This message was dispatched via Axion Secure SMTP Tunnel.</p>
+        <p style="margin-top: 20px; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;">Transmission Route: Axion Secure SMTP Tunnel v2.0</p>
       </div>
     `,
   };
 
+  // Email copy to the user (Client)
   const userMsg = {
     to: email,
     from: 'support@axionlab.in',
-    subject: 'We received your message - Axion Lab',
-    text: `Hello,\n\nThank you for reaching out to Axion Lab. We have received your inquiry and a partner will review it shortly.\n\nRef: ${new Date().getTime()}\n\nBest regards,\nAxion Operations Team`,
+    subject: 'Initiation Brief Copy - Axion Lab',
+    text: `Your system initiation request has been received.\n\nTECHNICAL BRIEF COPY:\n\n${message}\n\nWe will respond to this dossier within 24 hours.\n\nAXIONLAB Engineering`,
     html: `
-      <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; text-align: center;">
-        <div style="background: linear-gradient(to right, #4f46e5, #9333ea); padding: 2px; border-radius: 50%; width: 60px; height: 60px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-           <div style="background: white; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #4f46e5;">A</div>
+      <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 0px;">
+        <div style="background: #0e0e0e; padding: 30px; text-align: center; border-bottom: 1px solid #ff1f3d;">
+           <h1 style="color: #ffffff; margin: 0; font-weight: 900; letter-spacing: -0.05em; font-size: 24px;">AXIONLAB</h1>
         </div>
-        <h1 style="color: #1e1b4b;">Message Received</h1>
-        <p style="color: #475569; font-size: 16px;">Thank you for your interest in Axion Lab. Our engineering team has been notified and we will respond to your request within 24 hours.</p>
-        <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 30px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Axion Lab | Digital Evolution</p>
+        <div style="padding: 30px;">
+          <h2 style="color: #0e0e0e; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; font-size: 18px;">Brief Received.</h2>
+          <p style="color: #475569; font-size: 16px; line-height: 1.5;">Your system architecture brief has been logged. Our engineering team is reviewing the parameters. You will receive a response within 24 hours.</p>
+          
+          <div style="margin: 30px 0; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0;">
+            <h3 style="font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; color: #ff1f3d; margin-bottom: 15px;">Technical Brief Record</h3>
+            <pre style="font-family: monospace; font-size: 13px; color: #1e293b; white-space: pre-wrap; margin: 0;">${message}</pre>
+          </div>
+          
+          <p style="color: #94a3b8; font-size: 12px; font-style: italic;">Note: This is an automated record of your transmission. Our partners will reach out shortly for the next synchronization phase.</p>
+        </div>
+        <div style="background: #f1f5f9; padding: 20px; text-align: center;">
+          <p style="color: #64748b; font-size: 11px; margin: 0; text-transform: uppercase; letter-spacing: 0.1em;">AXIONLAB | Systems Engineering For The Obsessed</p>
+        </div>
       </div>
     `
   };

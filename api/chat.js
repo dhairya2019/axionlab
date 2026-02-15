@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import sgMail from '@sendgrid/mail';
 
@@ -8,36 +9,38 @@ export default async function handler(req, res) {
 
   const { message, history } = req.body;
 
-  // Updated to use GEMINI_API_KEY per infrastructure requirements
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is not configured on the server.' });
+  if (!process.env.API_KEY) {
+    return res.status(500).json({ error: 'SYSTEM_FAULT: Gemini API Key missing.' });
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const tools = [{
       functionDeclarations: [{
         name: 'sendEmailInquiry',
-        description: 'Sends a formal inquiry to Axion Lab and CCs the user.',
+        description: 'Sends technical lead details to Axion Lab support and the client.',
         parameters: {
           type: Type.OBJECT,
           properties: {
             userName: { type: Type.STRING },
             userEmail: { type: Type.STRING },
-            message: { type: Type.STRING },
-            inquiryType: { type: Type.STRING, enum: ["Scheduling", "Support", "General"] }
+            company: { type: Type.STRING },
+            scope: { type: Type.STRING },
+            priority: { type: Type.STRING, enum: ["Standard", "Critical", "Urgent"] }
           },
-          required: ['userName', 'userEmail', 'message', 'inquiryType'],
+          required: ['userName', 'userEmail', 'company', 'scope'],
         },
       }]
     }];
 
-    const systemInstruction = `You are the Axion Lab AI Concierge. 
-    1. ONLY answer questions about Axion Lab services (Web/App Dev, AI, DevOps) and locations.
-    2. REJECT off-topic questions politely.
-    3. To contact us or schedule, you MUST call 'sendEmailInquiry'.
-    4. Confirm that a copy is sent to both support@axionlab.in and the user's provided email.`;
+    const systemInstruction = `You are the AXIONLAB AI Concierge.
+    AXIONLAB specializes in AI Agents (Dify/Langflow), Headless Commerce, and Platform Engineering.
+    Guidelines:
+    - Tersce, professional, engineering-focused tone.
+    - Only discuss Axion Lab services.
+    - Collect Name, Company, Email, and Scope before calling 'sendEmailInquiry'.
+    - If a tool is called, explicitly tell the user that "The synchronization brief has been dispatched to our engineering node and a copy is in your inbox."`;
 
     const contents = history.map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
@@ -49,7 +52,7 @@ export default async function handler(req, res) {
       parts: [{ text: message }]
     });
 
-    let response = await ai.models.generateContent({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents,
       config: {
@@ -58,44 +61,46 @@ export default async function handler(req, res) {
       },
     });
 
-    let finalResponseText = response.text;
+    let finalResponseText = response.text || "";
     let emailSent = false;
 
-    if (response.functionCalls && response.functionCalls.length > 0) {
-      const fc = response.functionCalls[0];
-      if (fc.name === 'sendEmailInquiry' && process.env.SENDGRID_API_KEY) {
-        const { userName, userEmail, message: inquiryMsg, inquiryType } = fc.args;
-        
+    // Handle tool calls immediately
+    const functionCall = response.candidates?.[0]?.content?.parts?.find(p => p.functionCall);
+    
+    if (functionCall && functionCall.functionCall.name === 'sendEmailInquiry') {
+      const args = functionCall.functionCall.args;
+      
+      if (process.env.SENDGRID_API_KEY) {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         
-        const mailContent = {
-          to: 'support@axionlab.in',
-          from: 'support@axionlab.in',
-          replyTo: userEmail,
-          subject: `AI Concierge: ${inquiryType} Inquiry from ${userName}`,
-          text: inquiryMsg,
-          html: `<p><strong>Name:</strong> ${userName}</p><p><strong>Type:</strong> ${inquiryType}</p><p>${inquiryMsg}</p>`
-        };
-
         try {
-          await sgMail.send(mailContent);
-          emailSent = true;
-
-          const toolResponse = await ai.models.generateContent({
-            model: 'gemini-3-flash-preview',
-            contents: [
-              ...contents,
-              { role: 'model', parts: response.candidates[0].content.parts },
-              { role: 'user', parts: [{ text: `SYSTEM_SIGNAL: Email dispatched successfully. Confirmed with user.` }] }
-            ],
-            config: { systemInstruction }
-          });
+          const mailPayload = {
+            to: 'support@axionlab.in',
+            from: 'support@axionlab.in',
+            replyTo: args.userEmail,
+            subject: `[CONCIERGE] Initiation: ${args.company}`,
+            text: `Name: ${args.userName}\nEmail: ${args.userEmail}\nScope: ${args.scope}`,
+            html: `<h3>New System Initiation</h3><p><strong>Entity:</strong> ${args.company}</p><p><strong>Scope:</strong> ${args.scope}</p>`
+          };
           
-          finalResponseText = toolResponse.text;
-        } catch (sgError) {
-          console.error("SendGrid Tool Error:", sgError);
+          await sgMail.send(mailPayload);
+          emailSent = true;
+          // If we called a tool, provide a fallback confirmation if the model didn't provide text
+          if (!finalResponseText) {
+            finalResponseText = `PROTOCOL_SYNC: Initiation dossier for ${args.company} successfully dispatched. Copies sent to support@axionlab.in and your provided terminal. Our engineers will review these parameters shortly.`;
+          }
+        } catch (mailErr) {
+          console.error("Mail Relay Error:", mailErr);
+          finalResponseText = "RELAY_FAULT: I attempted to dispatch your dossier but the secure SMTP tunnel rejected the transmission. Please contact support@axionlab.in directly.";
         }
+      } else {
+        finalResponseText = "CONFIG_ERROR: Mail service unconfigured. Please relay your project scope to support@axionlab.in.";
       }
+    }
+
+    // Ensure we ALWAYS return text
+    if (!finalResponseText && !emailSent) {
+      finalResponseText = "CONNECTION_STABLE: Awaiting next command or data parameter.";
     }
 
     return res.status(200).json({ 
@@ -104,7 +109,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Gemini API Error:', error);
-    return res.status(500).json({ error: 'Internal server error processing chat.' });
+    console.error('Logic Error:', error);
+    return res.status(500).json({ error: 'CORE_EXCEPTION: Backend processing timed out or failed.' });
   }
 }

@@ -3,90 +3,66 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Axion Lab - Digital Evolution</title>
+    <title>AXIONLAB | Systems Engineering</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e1b4b",
-                        "secondary": "#312e81",
-                        "accent": "#4f46e5",
-                        "accent-glow": "#818cf8",
-                        "background-dark": "#0f0c29",
-                        "background-card": "rgba(255, 255, 255, 0.05)",
-                        "text-main": "#f8fafc",
-                        "text-muted": "#94a3b8",
+                        background: "#080808",
+                        accent: "#ff1f3d",
+                        muted: "#666666",
+                        surface: "#111111",
                     },
                     fontFamily: {
-                        "sans": ["Inter", "sans-serif"],
-                        "display": ["Space Grotesk", "sans-serif"],
-                        "serif": ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                        condensed: ["Inter Tight", "sans-serif"],
                     },
-                    boxShadow: {
-                        "glass": "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-                        "neon": "0 0 20px rgba(79, 70, 229, 0.5)",
+                    letterSpacing: {
+                        tighter: "-0.04em",
                     },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'spin-slow': 'spin 15s linear infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
-                    }
                 },
             },
         }
     </script>
     <style>
         body {
-            background-color: #0f0c29;
+            background-color: #080808;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
-            color: #f8fafc;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        h1, h2, h3, h4 {
+            font-family: 'Inter Tight', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
         }
-        .glass-sphere {
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 20%, rgba(79, 70, 229, 0.2) 100%);
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5),
-                        inset 10px 10px 20px rgba(255,255,255,0.2),
-                        0 0 50px rgba(79, 70, 229, 0.3);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Fluid typography for massive headings */
+        .fluid-heading {
+            font-size: clamp(2.5rem, 9vw, 10rem);
         }
-        .text-gradient-title {
-            background: linear-gradient(to right, #fff 20%, #818cf8 50%, #c084fc 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: textShine 5s ease-in-out infinite alternate;
+        * {
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
-        @keyframes textShine {
-            to { background-position: 200% center; }
+        ::selection {
+            background: #ff1f3d;
+            color: #ffffff;
         }
-        .portfolio-overlay {
-            background: linear-gradient(to top, rgba(15, 12, 41, 0.95) 0%, rgba(15, 12, 41, 0) 100%);
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Disable all decorative gradients */
+        .glass-panel, .bg-gradient-to-br, .bg-gradient-to-r, .bg-gradient-to-t {
+            background: #111111 !important;
+            backdrop-filter: none !important;
         }
     </style>
 <script type="importmap">
@@ -95,10 +71,13 @@
     "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
     "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
     "@sendgrid/mail": "https://esm.sh/@sendgrid/mail@^8.1.6",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
+    "next": "https://esm.sh/next@^16.1.6",
+    "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
   }
 }
 </script>
