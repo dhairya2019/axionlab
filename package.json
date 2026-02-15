@@ -1,4 +1,3 @@
-
 {
   "name": "axion-lab",
   "private": true,
@@ -13,12 +12,12 @@
     "@google/genai": "^1.41.0",
     "@sendgrid/mail": "^8.1.6",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
-  },
-  "devDependencies": {
+    "react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.0",
+    "typescript": "^5.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.0.0",
-    "vite": "^6.0.0"
+    "@types/node": "^20.0.0"
   }
 }

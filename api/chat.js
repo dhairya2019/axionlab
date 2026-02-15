@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import sgMail from '@sendgrid/mail';
 
@@ -9,6 +8,7 @@ export default async function handler(req, res) {
 
   const { message, history } = req.body;
 
+  // Updated to use GEMINI_API_KEY per infrastructure requirements
   if (!process.env.GEMINI_API_KEY) {
     return res.status(500).json({ error: 'GEMINI_API_KEY is not configured on the server.' });
   }
