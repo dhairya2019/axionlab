@@ -1,44 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Primary SEO -->
-  <title>AXIONLAB | Systems Engineering</title>
-  <meta name="description" content="Independent systems engineering lab. We architect commerce infrastructure, platform mesh, and high-performance applications for the obsessed." />
-
-  <!-- Open Graph -->
-  <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://axionlab.in/" />
-  <meta property="og:title"       content="AXIONLAB | Systems Engineering" />
-  <meta property="og:description" content="Independent systems engineering lab. We architect commerce infrastructure, platform mesh, and high-performance applications for the obsessed." />
-
-  <!-- Twitter -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="AXIONLAB | Systems Engineering" />
-  <meta name="twitter:description" content="Independent systems engineering lab. We architect commerce infrastructure, platform mesh, and high-performance applications for the obsessed." />
-
-  <!-- Favicon (inline SVG — no external request) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M10 78 L38 22 H51 L23 78 H10Z' fill='%23ff1f3d'/><path d='M42 22 L70 78 H83 L55 22 H42Z' fill='%23ff1f3d'/><path d='M45 78 L71 30 H84 L58 78 H45Z' fill='%23ff1f3d'/></svg>" />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet" />
-
-  <!--
-    REMOVED:
-    - <script src="https://cdn.tailwindcss.com"> — CDN Tailwind conflicts with compiled CSS
-      and adds ~350 KB to every page load. Vite compiles Tailwind via PostCSS.
-    - <script type="importmap"> — ESM importmap is ignored by Vite's build but
-      remained in the compiled HTML, causing browsers to double-load React etc. from esm.sh.
-    - <link rel="stylesheet" href="/index.css"> — file did not exist; Vite injects
-      CSS automatically via the compiled JS bundle.
-  -->
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>AXIONLAB | Systems Engineering</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M10 78 L38 22 H51 L23 78 H10Z' fill='%23ff1f3d'/><path d='M42 22 L70 78 H83 L55 22 H42Z' fill='%23ff1f3d'/><path d='M45 78 L71 30 H84 L58 78 H45Z' fill='%23ff1f3d'/></svg>"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800;900&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#080808",
+                        accent: "#ff1f3d",
+                        muted: "#666666",
+                        surface: "#111111",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        condensed: ["Inter Tight", "sans-serif"],
+                    },
+                    letterSpacing: {
+                        tighter: "-0.04em",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #080808;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Inter Tight', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+        .fluid-heading {
+            font-size: clamp(2.5rem, 9vw, 10rem);
+        }
+        * {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+        ::selection {
+            background: #ff1f3d;
+            color: #ffffff;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .glass-panel, .bg-gradient-to-br, .bg-gradient-to-r, .bg-gradient-to-t {
+            background: #111111 !important;
+            backdrop-filter: none !important;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "@sendgrid/mail": "https://esm.sh/@sendgrid/mail@^8.1.6",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
+    "next": "https://esm.sh/next@^16.1.6",
+    "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
-  <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
