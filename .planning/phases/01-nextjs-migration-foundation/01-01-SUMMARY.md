@@ -66,7 +66,7 @@ Each task was committed atomically:
 1. **Task 1: Install Next.js dependencies and remove Vite** - `fd8eae6` (chore)
 2. **Task 2: Update config files for Next.js** - `e19c9d5` (chore)
 
-**Plan metadata:** `[pending]` (docs: complete plan)
+**Plan metadata:** `a92918c` (docs: complete plan)
 
 ## Files Created/Modified
 - `package.json` - Scripts updated to next dev/build/start/lint; next installed; vite/autoprefixer removed

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-07T19:14:54.994Z"
+last_updated: "2026-03-08T20:00:00.000Z"
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
+  total_phases: 2
+  completed_phases: 2
+  total_plans: 9
+  completed_plans: 9
 ---
 
 # Project State
@@ -18,33 +18,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
-**Current focus:** Phase 1 complete and human-verified — Ready for Phase 2 (Blog Infrastructure)
+**Current focus:** Phase 2 complete and self-verified — Ready for Phase 3 (SEO and Metadata)
 
 ## Current Position
 
-Phase: 1 of 4 (Next.js Migration Foundation) — COMPLETE
-Plan: 5 of 5 in current phase — COMPLETE (human-verified 2026-03-08)
-Status: Phase 1 complete — ready to begin Phase 2
-Last activity: 2026-03-08 — Human visual verification approved for 01-05 (Task 3 checkpoint)
+Phase: 2 of 4 (Blog Infrastructure) — COMPLETE
+Plan: 4 of 4 in current phase — COMPLETE (self-verified 2026-03-08)
+Status: Phase 2 complete — ready to begin Phase 3
+Last activity: 2026-03-08 — Self-verified blog listing, post pages, syntax highlighting, tag filtering, sitemap, 404
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 2.0 min
-- Total execution time: 0.18 hours
+- Total plans completed: 9
+- Average duration: 1.7 min
+- Total execution time: 0.26 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-nextjs-migration-foundation | 5 | 17 min | 3.4 min |
+| 02-blog-infrastructure | 4 | 10 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (1 min), 01-03 (1 min), 01-04 (3 min), 01-05 (10 min)
-- Trend: Variable (01-05 required build error diagnosis)
+- Last 4 plans: 02-01 (3 min), 02-02 (1 min), 02-03 (1 min), 02-04 (5 min)
+- Trend: Steady — 02-04 included full build + visual verification
 
 *Updated after each plan completion*
 
@@ -73,10 +74,18 @@ Recent decisions affecting current work:
 - [01-04]: Same-page anchor href="#systems" kept as <a> — only inter-page routes use next/link Link component
 - [01-05]: app/page.tsx needs 'use client' — framer-motion v12 motion proxy requires client context during static prerendering, even when imported from a 'use client' MotionWrapper
 - [01-05]: transpilePackages: ['framer-motion'] added to next.config.mjs — Turbopack bundler compatibility with framer-motion v12
+- [02-01]: Both dev and build scripts use --webpack — Turbopack cannot serialize rehype-pretty-code Shiki JS options
+- [02-01]: remark-frontmatter included proactively to strip YAML from rendered MDX output
+- [02-01]: rehype-slug added for future TOC/deep-link support (Phase 4 ready)
+- [02-01]: getAllPosts() returns empty array if content/blog/ doesn't exist — graceful empty state
+- [02-02]: TagFilter is client island — receives serializable PostMeta[] from Server Component, owns useState for tag filtering
+- [02-03]: params is Promise<{slug: string}> in Next.js 16 — must await before accessing slug
+- [02-03]: Dynamic MDX import uses @/content/blog/${slug}.mdx path alias
+- [02-04]: Sitemap uses https://axionlab.in as BASE_URL, /insights has changeFrequency: 'weekly'
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
@@ -84,12 +93,14 @@ None yet.
 - [Phase 1 risk RESOLVED]: Framer Motion crash risk — MotionWrapper with "use client" created in 01-04, all pages updated
 - [Phase 1 risk RESOLVED]: Legacy Vite files cleaned up — all 13 files deleted in 01-05
 - [Phase 1 risk RESOLVED]: next build succeeded — all 7 pages + 2 API routes compile
-- [Phase 2 risk]: Turbopack + rehype-pretty-code compatibility uncertain — test early in Phase 2; fall back to --webpack if Shiki options are non-serializable
+- [Phase 2 risk RESOLVED]: Turbopack + rehype-pretty-code — confirmed incompatible, --webpack used for both dev and build
 - [Phase 2 risk RESOLVED]: API route chat.js unstable gemini-3-flash-preview model replaced with configurable GEMINI_MODEL env var defaulting to gemini-2.0-flash
-- [Note for Phase 2]: Pages using motion.* must declare 'use client' — framer-motion v12 breaking change from v10/v11
+- [Note]: Pages using motion.* must declare 'use client' — framer-motion v12 breaking change from v10/v11
+- [Note for Phase 3]: Sitemap already created in Phase 2 (02-04) — Phase 3 should focus on per-page metadata, robots.txt, and OG images
+- [Note for Phase 3]: Blog post pages already have generateMetadata with OG/Twitter — Phase 3 needs marketing page metadata only
 
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed 01-05-PLAN.md all 3 tasks — Phase 1 fully complete and human-verified. Ready for Phase 2.
+Stopped at: Completed all 4 Phase 2 plans. Blog infrastructure fully operational and self-verified. Ready for Phase 3.
 Resume file: None

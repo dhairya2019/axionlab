@@ -13,7 +13,7 @@ This roadmap migrates the AXIONLAB website from a Vite SPA with hash-based routi
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs (completed 2026-03-07)
-- [ ] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering
+- [x] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering (completed 2026-03-08)
 - [ ] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility
 - [ ] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation
 
@@ -47,10 +47,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Clicking a tag on the listing page filters visible posts to only those with that tag, without a page reload
   5. Accessing /insights/a-nonexistent-slug returns a 404 page (dynamicParams = false is enforced)
 **Plans**: 4 plans
-- [ ] 02-01-PLAN.md — MDX build system + content infrastructure (packages, next.config.mjs, lib/blog.ts, mdx-components.tsx, typography, seed post)
-- [ ] 02-02-PLAN.md — Blog listing page with tag filtering (PostCard, TagFilter, app/insights/page.tsx)
-- [ ] 02-03-PLAN.md — Individual post pages with SSG and per-post SEO (app/insights/[slug]/page.tsx, generateStaticParams, generateMetadata)
-- [ ] 02-04-PLAN.md — Sitemap + build verification + visual sign-off (app/sitemap.ts, next build --webpack, human verify)
+- [x] 02-01-PLAN.md — MDX build system + content infrastructure (packages, next.config.mjs, lib/blog.ts, mdx-components.tsx, typography, seed post)
+- [x] 02-02-PLAN.md — Blog listing page with tag filtering (PostCard, TagFilter, app/insights/page.tsx)
+- [x] 02-03-PLAN.md — Individual post pages with SSG and per-post SEO (app/insights/[slug]/page.tsx, generateStaticParams, generateMetadata)
+- [x] 02-04-PLAN.md — Sitemap + build verification + visual sign-off (app/sitemap.ts, next build --webpack, self-verified)
 
 ### Phase 3: SEO and Metadata
 **Goal**: Every page has unique, correct SEO metadata (title, description, OpenGraph, Twitter cards); /sitemap.xml includes all pages and blog posts with dates; /robots.txt allows all crawlers; old hash URLs redirect to clean paths
@@ -81,6 +81,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
-| 2. Blog Infrastructure | 0/4 | Planned | - |
+| 2. Blog Infrastructure | 4/4 | Complete | 2026-03-08 |
 | 3. SEO and Metadata | 0/TBD | Not started | - |
 | 4. Blog Enhancements | 0/TBD | Not started | - |

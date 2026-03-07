@@ -80,7 +80,7 @@ Each task was committed atomically:
 1. **Task 1: Replace globals.css with Tailwind v4 @theme configuration** - `e7bcdff` (feat)
 2. **Task 2: Rewrite layout.tsx with next/font, global components, and hash redirect** - `ffae628` (feat)
 
-**Plan metadata:** (docs commit — pending)
+**Plan metadata:** `e2cdf04` (docs: complete plan)
 
 ## Files Created/Modified
 - `app/globals.css` - Tailwind v4 @import, @theme block with canonical colors, global resets, glass-panel overrides, fluid-heading utility
@@ -113,3 +113,12 @@ None - no external service configuration required.
 ---
 *Phase: 01-nextjs-migration-foundation*
 *Completed: 2026-03-07*
+
+## Self-Check: PASSED
+
+- app/globals.css: FOUND
+- app/layout.tsx: FOUND
+- .planning/phases/01-nextjs-migration-foundation/01-02-SUMMARY.md: FOUND
+- commit e7bcdff (globals.css): FOUND
+- commit ffae628 (layout.tsx): FOUND
+- commit e2cdf04 (docs): FOUND
