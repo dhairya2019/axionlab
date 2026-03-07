@@ -1,4 +1,4 @@
-
+'use client'
 import React from "react";
 import { motion } from "@/components/motion/MotionWrapper";
 import Link from "next/link";
