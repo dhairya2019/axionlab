@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, ChevronDown, Send, ShieldCheck, Terminal, Server } from 'lucide-react';
 
