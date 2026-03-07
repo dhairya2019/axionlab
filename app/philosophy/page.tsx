@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -79,6 +80,24 @@ export default function Philosophy() {
             </div>
           </div>
         </div>
+
+        <section className="mt-48">
+          <h3 className="text-[10px] text-accent font-bold uppercase tracking-[0.5em] mb-12">Applied Philosophy</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Link href="/insights/systems-architecture-consulting-guide" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+              <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Consulting</span>
+              <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Systems Architecture Consulting Guide</span>
+            </Link>
+            <Link href="/insights/software-engineering-labs-india" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+              <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Operating Model</span>
+              <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Independent Engineering Labs in India</span>
+            </Link>
+            <Link href="/insights/observability-driven-development" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+              <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Methodology</span>
+              <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Observability-Driven Development</span>
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );

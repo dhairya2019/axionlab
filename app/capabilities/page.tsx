@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -72,6 +73,28 @@ export default function Capabilities() {
         <p className="text-2xl md:text-5xl font-black leading-[0.9] tracking-tighter uppercase max-w-5xl">
           We architect dynamic environments that evolve alongside traffic, complexity, and operational load. Stasis is failure.
         </p>
+      </section>
+
+      <section className="mt-32">
+        <h3 className="text-[10px] text-accent font-bold uppercase tracking-[0.5em] mb-12">Technical Briefings</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Link href="/insights/headless-commerce-architecture" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Commerce Systems</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Headless Commerce Architecture</span>
+          </Link>
+          <Link href="/insights/engineering-high-performance-apis" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Platform Engineering</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Engineering High-Performance APIs</span>
+          </Link>
+          <Link href="/insights/ai-agent-orchestration-production" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">AI Agent Systems</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">AI Agent Orchestration in Production</span>
+          </Link>
+          <Link href="/insights/nextjs-static-generation-enterprise" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Application Development</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Next.js Static Generation for Enterprise</span>
+          </Link>
+        </div>
       </section>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -135,6 +136,24 @@ export default function Work() {
           </div>
         ))}
       </div>
+
+      <section className="mt-48">
+        <h3 className="text-[10px] text-accent font-bold uppercase tracking-[0.5em] mb-12">Engineering Insights</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Link href="/insights/building-resilient-distributed-systems" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Systems Reliability</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Building Resilient Distributed Systems</span>
+          </Link>
+          <Link href="/insights/event-driven-architecture-commerce" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Commerce Architecture</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Event-Driven Architecture for Commerce</span>
+          </Link>
+          <Link href="/insights/real-time-inventory-management-commerce" className="border border-white/10 p-8 hover:border-accent transition-colors group">
+            <span className="text-[9px] text-muted uppercase tracking-[0.4em] font-bold block mb-4">Infrastructure</span>
+            <span className="text-xl font-black uppercase tracking-tighter group-hover:text-accent transition-colors block">Real-Time Inventory Management at Scale</span>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

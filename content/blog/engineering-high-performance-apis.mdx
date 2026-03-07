@@ -35,3 +35,97 @@ Layer your caches: CDN → application → database query cache. Each layer abso
 - **CDN**: Static responses, TTL-based invalidation
 - **Application**: Computed results, LRU eviction
 - **Query cache**: Parameterized queries, write-through invalidation
+
+## Serialization Overhead
+
+JSON is the default API format, but it is not free. Parsing and serializing JSON adds measurable latency at high throughput. For internal service-to-service communication, consider binary protocols.
+
+```typescript
+// JSON: ~2ms serialization for a 10KB payload
+const json = JSON.stringify(payload)
+
+// Protocol Buffers: ~0.2ms for the same payload
+const proto = MyMessage.encode(payload).finish()
+```
+
+The ten-to-one improvement compounds across service chains. A request that touches five services saves 9ms in serialization alone. At thousands of requests per second, this translates directly into reduced CPU utilization and lower tail latencies.
+
+For public-facing APIs, JSON remains the pragmatic choice — developer experience matters. But behind the gateway, binary protocols pay for themselves immediately.
+
+### Schema Validation at the Edge
+
+Validate request payloads at the API gateway, not in business logic. Early validation prevents malformed requests from consuming resources deeper in the stack.
+
+```typescript
+import { z } from 'zod'
+
+const OrderSchema = z.object({
+  items: z.array(z.object({
+    sku: z.string().min(1),
+    quantity: z.number().int().positive(),
+  })).min(1),
+  currency: z.enum(['USD', 'EUR', 'INR']),
+})
+
+// Validate once at the edge — downstream services trust the payload
+const validated = OrderSchema.parse(req.body)
+```
+
+This pattern eliminates redundant validation across microservices and produces consistent error responses for API consumers.
+
+## Database Query Optimization
+
+The most impactful performance improvement is almost always at the database layer. Before optimizing application code, examine your query patterns.
+
+### Index Strategy
+
+Indexes accelerate reads but slow writes. The right index strategy depends on your read/write ratio:
+
+- **Read-heavy workloads** (>80% reads): Index aggressively. Composite indexes for common query patterns. Cover frequently-accessed columns.
+- **Write-heavy workloads** (>50% writes): Minimize indexes. Use append-only tables. Batch writes.
+- **Mixed workloads**: Separate read and write paths. Use read replicas with aggressive indexing.
+
+### N+1 Query Prevention
+
+The most common performance anti-pattern in API development is the N+1 query — fetching a list, then making an individual query for each item:
+
+```typescript
+// BAD: N+1 queries — 1 for orders + N for customers
+const orders = await db.query('SELECT * FROM orders LIMIT 100')
+for (const order of orders) {
+  order.customer = await db.query('SELECT * FROM customers WHERE id = $1', [order.customer_id])
+}
+
+// GOOD: 2 queries total — batch load
+const orders = await db.query('SELECT * FROM orders LIMIT 100')
+const customerIds = orders.map(o => o.customer_id)
+const customers = await db.query('SELECT * FROM customers WHERE id = ANY($1)', [customerIds])
+```
+
+This single optimization often produces order-of-magnitude improvements in endpoint latency.
+
+## Rate Limiting and Backpressure
+
+High-performance APIs must protect themselves from overload. Without rate limiting, a traffic spike from one consumer can degrade service for all consumers.
+
+We implement token bucket rate limiting at the API gateway:
+
+- **Per-consumer limits** prevent individual clients from monopolizing capacity
+- **Global limits** protect downstream dependencies from cascading overload
+- **Graduated responses** — return `429 Too Many Requests` with `Retry-After` headers before the system is truly overwhelmed
+
+Backpressure is the internal equivalent. When a downstream service is slow, propagate that slowness upward rather than buffering indefinitely. Unbounded queues are a memory leak waiting to happen.
+
+## Monitoring API Performance
+
+You cannot optimize what you do not measure. We track five metrics for every API endpoint:
+
+1. **p50 latency** — the typical experience
+2. **p99 latency** — the worst-case experience for 1 in 100 requests
+3. **Error rate** — percentage of 5xx responses
+4. **Throughput** — requests per second
+5. **Saturation** — connection pool utilization, CPU, memory
+
+The p99 matters more than the average. An API with 5ms average latency but 500ms p99 latency has a tail latency problem that will surface as user-facing failures under load.
+
+At AXIONLAB, we build these monitoring foundations into every API we architect. Explore our approach to [platform engineering and API infrastructure](/capabilities), or see how we applied these principles in our [technical case studies](/work).

@@ -37,3 +37,75 @@ Not all metrics are equal. Focus on the four golden signals:
 ### Distributed Tracing
 
 In a microservices architecture, a single user request touches dozens of services. Without tracing, debugging is archaeology.
+
+Every request generates a trace ID at the edge. That ID propagates through every service call, every queue message, every database query. When something goes wrong, you can reconstruct the entire request path in seconds.
+
+```typescript
+// Propagate trace context through service calls
+async function fetchWithTrace(url: string, context: TraceContext) {
+  return fetch(url, {
+    headers: {
+      'x-trace-id': context.traceId,
+      'x-span-id': context.spanId,
+      'x-parent-span-id': context.parentSpanId,
+    },
+  })
+}
+```
+
+The overhead of trace propagation is negligible — a few extra HTTP headers per request. The debugging time it saves is measured in hours per incident.
+
+## The Three Pillars in Practice
+
+Observability is often described as three pillars: logs, metrics, and traces. But the pillars only create value when they are correlated. An alert fires on a latency metric. The engineer clicks through to traces showing slow spans. The spans link to structured logs revealing the root cause.
+
+Without correlation, each pillar is an isolated data source requiring manual investigation. With correlation, they form a diagnostic pipeline that surfaces answers in minutes.
+
+### Correlation IDs
+
+The simplest correlation mechanism is a request ID that appears in all three pillars:
+
+```typescript
+function createRequestContext(): RequestContext {
+  const requestId = crypto.randomUUID()
+  return {
+    requestId,
+    logger: logger.child({ request_id: requestId }),
+    tracer: tracer.startSpan('request', { attributes: { request_id: requestId } }),
+    metrics: metrics.withLabels({ request_id: requestId }),
+  }
+}
+```
+
+When an alert fires, search for the request ID across logs, traces, and metrics. The entire request lifecycle becomes visible.
+
+## Alerting Strategy
+
+Not every metric warrants an alert. Over-alerting causes alert fatigue — engineers start ignoring notifications, and real incidents get lost in the noise.
+
+We follow a tiered alerting model:
+
+1. **Page-worthy** — customer-facing impact, requires immediate response. Examples: error rate above 1%, p99 latency above 5 seconds, zero throughput.
+2. **Ticket-worthy** — degradation that needs investigation within 24 hours. Examples: disk usage above 80%, memory growth trend, certificate expiring in 7 days.
+3. **Dashboard-only** — informational signals that provide context. Examples: deployment markers, traffic trends, cache hit ratios.
+
+The ratio matters: fewer than 5% of metrics should generate page-worthy alerts. If engineers are paged more than twice per week outside incidents, the alerting threshold is too low.
+
+## Service Level Objectives
+
+SLOs formalize reliability targets as measurable commitments. Instead of vague goals like "the API should be fast," an SLO states: "99.9% of requests complete within 200ms over any 30-day window."
+
+This precision enables data-driven decisions:
+
+- **Error budget** — the acceptable amount of unreliability. A 99.9% SLO allows 43 minutes of downtime per month. If the error budget is being consumed too quickly, freeze feature releases and focus on reliability.
+- **Burn rate alerts** — instead of alerting on instantaneous error rates, alert when the error budget is being consumed faster than sustainable. This reduces false positives while catching real degradation.
+
+SLOs also align engineering and business teams. Product managers understand "we have 20 minutes of error budget remaining this month" better than "the p99 latency increased by 15ms."
+
+## Implementing Observability from Day One
+
+The highest-leverage time to add observability is at the start of a project. Retrofitting instrumentation into an existing codebase is expensive and incomplete — you instrument what you think matters, missing the failure modes you have not yet imagined.
+
+Our approach at AXIONLAB is to build the observability layer before the first feature. The HTTP server starts with request logging, metrics collection, and trace propagation enabled by default. Every new endpoint inherits this instrumentation automatically.
+
+This philosophy extends to [how we approach systems architecture broadly](/philosophy) — building foundations that make the right behavior automatic. For teams looking to strengthen their observability practice, we bring this discipline to every [platform engineering engagement](/capabilities).

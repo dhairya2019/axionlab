@@ -94,4 +94,68 @@ async function resilientFetch(url: string, options?: RequestInit): Promise<Respo
 
 Every AXIONLAB deployment includes a monitoring dashboard that tracks circuit breaker state across services. When a breaker trips, the on-call engineer sees it within seconds — not minutes.
 
-Read more about our [engineering philosophy](/philosophy) and how we apply these principles across every engagement.
+## Retry Strategies and Backoff
+
+Not every failure warrants a circuit breaker. Transient errors — network blips, temporary resource exhaustion, brief leader elections — resolve on their own. For these, exponential backoff with jitter is the standard approach.
+
+```typescript
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 100
+): Promise<T> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn()
+    } catch (error) {
+      if (attempt === maxRetries) throw error
+      const delay = baseDelay * Math.pow(2, attempt)
+      const jitter = delay * Math.random()
+      await new Promise(r => setTimeout(r, delay + jitter))
+    }
+  }
+  throw new Error('unreachable')
+}
+```
+
+The jitter is critical. Without it, a thousand clients all backing off at the same rate create a "thundering herd" — they all retry at the same instant, causing the same failure again. Randomized jitter spreads retries across time.
+
+### When to Retry vs When to Break
+
+Use retries for transient failures. Use circuit breakers for persistent failures. The distinction matters:
+
+- **Retry**: DNS resolution failed, TCP handshake timed out, 503 from a load balancer
+- **Break**: Service consistently returning 500, database connection refused, authentication failures
+
+Combining both — retries within a circuit breaker — gives the most resilient behavior. The circuit breaker tracks the aggregate failure rate, while retries handle individual transient errors.
+
+## Health Checks and Readiness Probes
+
+A running service is not necessarily a healthy service. We implement two-tier health checking:
+
+1. **Liveness probes** — is the process running and can it respond? Returns 200 if the HTTP server is accepting connections. Kubernetes restarts the pod if this fails.
+2. **Readiness probes** — can the service handle production traffic? Checks database connectivity, cache availability, and downstream dependency health. Returns 503 if any critical dependency is unreachable.
+
+The distinction prevents unhealthy pods from receiving traffic while keeping them alive long enough to recover. A service that temporarily loses its database connection should stop receiving requests but should not be killed — the connection will likely recover.
+
+## Chaos Engineering
+
+Testing resilience in staging is necessary but insufficient. Production systems have emergent behaviors that staging environments cannot replicate — traffic patterns, data distributions, timing-dependent race conditions.
+
+We run controlled chaos experiments in production:
+
+- **Network partition injection** — simulating partial connectivity loss between services
+- **Latency injection** — adding artificial delays to specific service calls
+- **Resource exhaustion** — gradually limiting CPU or memory to validate degradation behavior
+
+The goal is not to break things. The goal is to validate that your resilience patterns actually work under realistic conditions. A circuit breaker that has never tripped in production is an untested circuit breaker.
+
+## Observability as a Foundation
+
+Resilience without observability is guesswork. Every pattern described above — circuit breakers, retries, health checks — generates signals that must be captured and correlated.
+
+We instrument every resilience mechanism with structured metrics: breaker state transitions, retry counts, health check durations, fallback activations. These feed into dashboards that give operators real-time visibility into system health.
+
+For a deeper look at how we approach instrumentation, see our post on [observability-driven development](/insights/observability-driven-development).
+
+Explore our [embedded engineering philosophy](/philosophy) and see how we apply these resilience principles across our [systems engineering capabilities](/capabilities).

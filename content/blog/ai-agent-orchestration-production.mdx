@@ -1,0 +1,377 @@
+---
+title: "AI Agent Orchestration in Production: Patterns for Reliable Autonomous Systems"
+date: "2025-11-20"
+description: "Production patterns for orchestrating AI agents including retry logic, memory management, and multi-model coordination."
+tags: ["ai-agents", "architecture", "automation"]
+author: "AXIONLAB"
+---
+
+Running a single LLM call in production is a solved problem. Wrap it in a try-catch, add a timeout, log the response, move on. But the moment you chain multiple AI calls together -- where the output of one model feeds the input of another, where decisions branch based on intermediate results, where the system needs to remember what it did three steps ago -- you are no longer calling an API. You are orchestrating autonomous agents. And orchestration is a systems engineering problem.
+
+AI agent orchestration is the discipline of coordinating multiple AI-driven components to accomplish complex tasks reliably. It borrows heavily from distributed systems patterns: retry logic, circuit breakers, state machines, and observability. The difference is that the components being orchestrated are non-deterministic. The same input can produce different outputs. A successful call can still return a wrong answer. Traditional error handling assumes that success means correctness. With agents, it does not.
+
+## Single-Agent vs Multi-Agent Architectures
+
+The first architectural decision is whether a task requires one agent with multiple tools or multiple specialized agents coordinating together.
+
+### Single Agent with Tool Access
+
+A single agent receives a goal, reasons about it, selects tools, and iterates until the task is complete. This is the ReAct (Reason + Act) pattern:
+
+```typescript
+interface AgentStep {
+  thought: string
+  action: string
+  actionInput: Record<string, unknown>
+  observation: string
+}
+
+async function executeAgent(
+  goal: string,
+  tools: Tool[],
+  maxSteps: number = 10
+): Promise<AgentResult> {
+  const steps: AgentStep[] = []
+
+  for (let i = 0; i < maxSteps; i++) {
+    const prompt = buildPrompt(goal, tools, steps)
+    const response = await llm.complete(prompt)
+    const parsed = parseAgentResponse(response)
+
+    if (parsed.action === 'FINAL_ANSWER') {
+      return { success: true, answer: parsed.actionInput.answer, steps }
+    }
+
+    const tool = tools.find(t => t.name === parsed.action)
+    if (!tool) {
+      steps.push({ ...parsed, observation: `Tool "${parsed.action}" not found` })
+      continue
+    }
+
+    const observation = await tool.execute(parsed.actionInput)
+    steps.push({ ...parsed, observation })
+  }
+
+  return { success: false, error: 'Max steps exceeded', steps }
+}
+```
+
+This works well for tasks with a clear goal and a bounded set of tools: research queries, data extraction, code generation with validation. The single agent maintains context across all steps, which simplifies memory management.
+
+### Multi-Agent Coordination
+
+When a task requires fundamentally different capabilities -- analysis, writing, code generation, review -- a multi-agent architecture assigns each capability to a specialized agent:
+
+```typescript
+interface AgentConfig {
+  name: string
+  systemPrompt: string
+  model: string        // Different agents can use different models
+  tools: Tool[]
+  maxTokens: number
+}
+
+const researchAgent: AgentConfig = {
+  name: 'researcher',
+  systemPrompt: 'You extract and synthesize information from provided sources...',
+  model: 'claude-sonnet-4-20250514',
+  tools: [webSearch, documentReader],
+  maxTokens: 4096,
+}
+
+const writerAgent: AgentConfig = {
+  name: 'writer',
+  systemPrompt: 'You produce technical documentation from research summaries...',
+  model: 'claude-sonnet-4-20250514',
+  tools: [fileWriter, formatChecker],
+  maxTokens: 8192,
+}
+
+const reviewerAgent: AgentConfig = {
+  name: 'reviewer',
+  systemPrompt: 'You review documents for accuracy, completeness, and style...',
+  model: 'claude-opus-4-20250514',   // Higher capability for judgment tasks
+  tools: [factChecker, styleValidator],
+  maxTokens: 2048,
+}
+```
+
+The orchestrator manages the pipeline: research produces a summary, the writer consumes the summary and produces a draft, the reviewer evaluates the draft and either approves or sends it back to the writer with feedback. Each agent is stateless between invocations. The orchestrator owns the state.
+
+> The orchestrator is the control plane. Agents are the data plane. Conflating the two is the most common architectural mistake in agentic systems.
+
+## Memory Management: The Hard Problem
+
+Agents without memory are stateless functions. Agents with memory are systems with state management requirements. There are three memory tiers in production agent systems.
+
+### Working Memory (Context Window)
+
+The most immediate form of memory is the conversation context itself. Every message, tool call, and observation occupies tokens in the context window. The constraint is real: even with 200K-token context windows, a complex multi-step task can exhaust available context within 15-20 tool calls.
+
+```typescript
+class WorkingMemory {
+  private entries: MemoryEntry[] = []
+  private maxTokens: number
+
+  constructor(maxTokens: number = 100_000) {
+    this.maxTokens = maxTokens
+  }
+
+  add(entry: MemoryEntry): void {
+    this.entries.push(entry)
+    this.compress()
+  }
+
+  private compress(): void {
+    while (this.estimateTokens() > this.maxTokens) {
+      // Summarize oldest entries rather than dropping them
+      const oldest = this.entries.splice(0, 5)
+      const summary = this.summarize(oldest)
+      this.entries.unshift(summary)
+    }
+  }
+
+  private summarize(entries: MemoryEntry[]): MemoryEntry {
+    // Distill multiple entries into a single summary
+    return {
+      type: 'summary',
+      content: entries.map(e => e.content).join('\n'),
+      timestamp: entries[0].timestamp,
+      compressed: true,
+    }
+  }
+}
+```
+
+The compression strategy matters. Naive truncation loses critical early context (the original goal, key constraints). Summarization preserves semantic content at the cost of an additional LLM call. Sliding windows with pinned messages keep the goal and recent context while dropping the middle.
+
+### Episodic Memory (Cross-Session)
+
+For agents that run repeatedly -- daily report generators, monitoring agents, iterative code reviewers -- episodic memory stores the outcomes of previous runs:
+
+```typescript
+interface Episode {
+  id: string
+  taskDescription: string
+  startedAt: Date
+  completedAt: Date
+  outcome: 'success' | 'failure' | 'partial'
+  summary: string
+  keyDecisions: string[]
+  errors: ErrorRecord[]
+}
+
+class EpisodicMemory {
+  constructor(private store: VectorStore) {}
+
+  async recall(currentTask: string, limit: number = 5): Promise<Episode[]> {
+    // Retrieve semantically similar past episodes
+    return this.store.similaritySearch(currentTask, limit)
+  }
+
+  async record(episode: Episode): Promise<void> {
+    await this.store.upsert(episode.id, episode)
+  }
+}
+```
+
+Before starting a task, the agent retrieves relevant past episodes. If a similar task failed last time due to a specific API being down, the agent can proactively check that API's status before proceeding. This is not intelligence -- it is structured recall.
+
+### Shared Memory (Multi-Agent)
+
+In multi-agent systems, agents need a shared memory space to coordinate without direct communication. A shared scratchpad pattern works:
+
+```typescript
+class SharedMemory {
+  private store: Map<string, { value: unknown; author: string; timestamp: Date }>
+
+  write(key: string, value: unknown, author: string): void {
+    this.store.set(key, { value, author, timestamp: new Date() })
+  }
+
+  read(key: string): unknown | undefined {
+    return this.store.get(key)?.value
+  }
+
+  readByAuthor(author: string): Array<{ key: string; value: unknown }> {
+    return Array.from(this.store.entries())
+      .filter(([_, v]) => v.author === author)
+      .map(([key, v]) => ({ key, value: v.value }))
+  }
+}
+```
+
+The research agent writes findings to shared memory. The writer agent reads them. The reviewer agent reads both the findings and the draft. No agent needs to know about the others -- they coordinate through shared state.
+
+## Error Handling in Non-Deterministic Systems
+
+Traditional retry logic assumes that a failed operation will succeed on retry if the transient condition clears. With LLM-based agents, there is a second failure mode: the operation succeeds (HTTP 200, valid JSON response) but the output is wrong, incomplete, or hallucinated.
+
+### Structured Output Validation
+
+Every agent response must be validated against a schema before the orchestrator acts on it:
+
+```typescript
+import { z } from 'zod'
+
+const AnalysisSchema = z.object({
+  findings: z.array(z.object({
+    claim: z.string(),
+    confidence: z.number().min(0).max(1),
+    sources: z.array(z.string().url()),
+  })),
+  summary: z.string().min(50),
+  recommendedActions: z.array(z.string()),
+})
+
+async function executeWithValidation<T>(
+  agent: AgentConfig,
+  input: string,
+  schema: z.ZodType<T>,
+  maxRetries: number = 3
+): Promise<T> {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await callAgent(agent, input)
+
+    const result = schema.safeParse(response)
+    if (result.success) {
+      return result.data
+    }
+
+    // Feed validation errors back to the agent
+    input = `${input}\n\nYour previous response failed validation:\n${result.error.message}\n\nPlease fix and try again.`
+  }
+
+  throw new AgentValidationError('Max retries exceeded', schema)
+}
+```
+
+The key detail: validation errors are fed back to the agent as context. The agent does not blindly retry -- it sees what went wrong and corrects. This turns validation into a feedback loop, not just a gate.
+
+### Circuit Breakers for Agent Calls
+
+Agent calls are expensive (latency, cost, and the downstream effects of acting on wrong outputs). Circuit breakers prevent runaway failures:
+
+```typescript
+class AgentCircuitBreaker {
+  private failures = 0
+  private validationFailures = 0
+  private state: 'closed' | 'open' | 'half-open' = 'closed'
+
+  async execute<T>(
+    fn: () => Promise<T>,
+    fallback: () => T
+  ): Promise<T> {
+    if (this.state === 'open') {
+      return fallback()
+    }
+
+    try {
+      const result = await fn()
+      this.onSuccess()
+      return result
+    } catch (error) {
+      if (error instanceof AgentValidationError) {
+        this.validationFailures++
+      }
+      this.onFailure()
+      return fallback()
+    }
+  }
+
+  private onFailure(): void {
+    this.failures++
+    // Trip on either transport failures OR repeated validation failures
+    if (this.failures >= 3 || this.validationFailures >= 5) {
+      this.state = 'open'
+    }
+  }
+}
+```
+
+Note the distinction between transport failures (timeouts, rate limits) and validation failures (wrong output format). Both contribute to tripping the breaker, but they have different thresholds because they indicate different problems.
+
+## Model Routing: Right Model for the Right Task
+
+Not every agent task requires the most capable (and most expensive) model. Production orchestration systems route tasks to models based on complexity, latency requirements, and cost:
+
+```typescript
+interface ModelConfig {
+  id: string
+  costPer1kTokens: number
+  avgLatencyMs: number
+  maxTokens: number
+}
+
+function selectModel(task: AgentTask): ModelConfig {
+  if (task.requiresReasoning && task.complexity === 'high') {
+    return models['claude-opus-4-20250514']        // Complex reasoning
+  }
+
+  if (task.type === 'classification' || task.type === 'extraction') {
+    return models['claude-haiku-35']    // Fast, cheap, sufficient
+  }
+
+  return models['claude-sonnet-4-20250514']       // Default balanced choice
+}
+```
+
+In practice, 60-80% of agent tasks in a production pipeline are classification, extraction, or formatting -- tasks where a smaller, faster model performs identically to a frontier model. Routing these to Haiku-class models reduces cost by 10x and latency by 3-5x without degrading pipeline quality.
+
+The judgment calls -- deciding whether a code change is safe, evaluating whether a research summary is complete, reviewing a generated document -- route to the most capable model available. The orchestrator makes this routing decision, not the agents.
+
+## Production Monitoring and Observability
+
+Agent systems produce a volume of intermediate state that traditional APM tools are not designed to capture. Custom instrumentation is required.
+
+### Trace Structure
+
+Every agent execution should produce a structured trace:
+
+```typescript
+interface AgentTrace {
+  traceId: string
+  parentTraceId?: string       // For multi-agent pipelines
+  agent: string
+  model: string
+  startedAt: Date
+  completedAt: Date
+  steps: Array<{
+    type: 'reasoning' | 'tool_call' | 'validation'
+    input: string
+    output: string
+    durationMs: number
+    tokensUsed: { input: number; output: number }
+  }>
+  outcome: 'success' | 'failure' | 'partial'
+  totalCost: number
+  totalTokens: number
+}
+```
+
+These traces are the debugging lifeline. When a pipeline produces a wrong output at 3 AM, the trace shows exactly which agent, at which step, produced the output that derailed downstream processing.
+
+### Metrics to Track
+
+Beyond standard API metrics, agent orchestration requires:
+
+- **Step count per task**: Are agents taking more steps than expected? This indicates prompt drift or tool failures.
+- **Validation failure rate**: Rising validation failures suggest model behavior changes or schema mismatches.
+- **Cost per task completion**: Track this over time. Cost should decrease as you optimize model routing and caching.
+- **Hallucination rate**: For tasks with verifiable outputs, compare agent claims against ground truth.
+
+## Scaling Concerns
+
+Agent orchestration systems have unique scaling characteristics. The primary bottleneck is rarely compute -- it is the rate limits and latency of the underlying model APIs.
+
+**Concurrency management**: Run independent agent tasks in parallel, but serialize dependent steps. A research + write + review pipeline has inherent sequential dependencies. Three independent research tasks can run concurrently.
+
+**Queue-based execution**: For batch workloads (processing 10,000 documents), use a task queue with configurable concurrency. This prevents rate limit exhaustion and provides natural retry semantics.
+
+**Caching**: Agent responses to identical inputs are not guaranteed to be identical, but for deterministic subtasks (parsing, extraction), caching saves significant cost and latency. Use content-addressable caching keyed on the full prompt hash.
+
+## Building Agent Systems That Last
+
+The gap between a demo agent and a production agent system is the same gap that exists in every domain of software engineering: error handling, observability, graceful degradation, and operational maturity. The model is the least interesting part. The orchestration layer -- the part that decides what to do when things go wrong, which model to use for which task, and how to maintain state across steps -- is where the engineering lives.
+
+This is the kind of systems work we do at AXIONLAB. Our [applied AI and automation capabilities](/capabilities) cover the full stack from model selection through production monitoring. You can see examples of how these patterns translate to real client outcomes in [our work](/work).

@@ -1,0 +1,287 @@
+---
+title: "Event-Driven Architecture for Commerce: Beyond Request-Response"
+date: "2025-06-10"
+description: "Why event-driven architecture outperforms request-response patterns for commerce systems handling high-concurrency order flows."
+tags: ["architecture", "commerce", "events"]
+author: "AXIONLAB"
+---
+
+Request-response is the default. A client sends a request, the server processes it, the server returns a response. This pattern is simple, well-understood, and sufficient for most applications. It is also the wrong foundation for commerce systems operating at scale.
+
+Commerce has unique properties that break request-response assumptions. Orders involve multiple services -- inventory, payment, shipping, notifications, fraud detection -- that must coordinate without tight coupling. Peak traffic is bursty and unpredictable. Failures in one subsystem should not block the entire order pipeline. And every transaction must be auditable, recoverable, and idempotent.
+
+Event-driven architecture addresses all of these constraints. Instead of services calling each other synchronously, they communicate through events: immutable facts about things that happened. This inversion -- from "tell service B to do X" to "announce that X happened and let interested services react" -- changes everything about how commerce systems behave under pressure.
+
+## Request-Response Limitations at Scale
+
+Consider a typical synchronous order flow. The API gateway receives an order, calls the inventory service to reserve stock, calls the payment service to charge the card, calls the shipping service to create a label, and calls the notification service to send a confirmation email. Each call is blocking. The total latency is the sum of all service latencies. If any service is slow, the entire request is slow. If any service is down, the entire request fails.
+
+```typescript
+// Synchronous order processing: brittle and slow
+async function processOrder(order: Order): Promise<OrderResult> {
+  const inventory = await inventoryService.reserve(order.items)     // 120ms
+  const payment = await paymentService.charge(order.total)          // 800ms
+  const shipping = await shippingService.createLabel(order.address) // 200ms
+  await notificationService.sendConfirmation(order.email)           // 150ms
+
+  return { status: 'completed', orderId: order.id }
+  // Total: ~1270ms, and any failure rolls back everything
+}
+```
+
+This is 1.2 seconds of blocking time on the happy path. During a flash sale, when order volume spikes 50x, every one of those downstream services becomes a bottleneck. The payment gateway introduces latency spikes. The inventory service contends on database locks. The shipping API rate-limits your requests. The entire pipeline stalls.
+
+### The Coupling Problem
+
+Synchronous calls create temporal coupling (service B must be available when service A calls it) and behavioral coupling (service A must know service B's API contract). Adding a new step -- say, fraud detection -- requires modifying the orchestrating service, redeploying it, and hoping the new dependency does not introduce latency or failure modes that break the existing flow.
+
+## Event Sourcing Fundamentals
+
+Event sourcing inverts the data model. Instead of storing current state ("order status: shipped"), you store the sequence of events that produced that state ("order placed, payment captured, items packed, shipment dispatched"). Current state is a derived view, computed by replaying events.
+
+```typescript
+// Events are immutable facts
+type OrderEvent =
+  | { type: 'ORDER_PLACED'; orderId: string; items: Item[]; timestamp: number }
+  | { type: 'PAYMENT_CAPTURED'; orderId: string; amount: number; timestamp: number }
+  | { type: 'ITEMS_RESERVED'; orderId: string; warehouseId: string; timestamp: number }
+  | { type: 'SHIPMENT_DISPATCHED'; orderId: string; trackingId: string; timestamp: number }
+  | { type: 'ORDER_CANCELLED'; orderId: string; reason: string; timestamp: number }
+
+// State is derived by folding events
+function deriveOrderState(events: OrderEvent[]): OrderState {
+  return events.reduce((state, event) => {
+    switch (event.type) {
+      case 'ORDER_PLACED':
+        return { ...state, status: 'pending', items: event.items }
+      case 'PAYMENT_CAPTURED':
+        return { ...state, status: 'paid', amountCharged: event.amount }
+      case 'ITEMS_RESERVED':
+        return { ...state, status: 'reserved', warehouseId: event.warehouseId }
+      case 'SHIPMENT_DISPATCHED':
+        return { ...state, status: 'shipped', trackingId: event.trackingId }
+      case 'ORDER_CANCELLED':
+        return { ...state, status: 'cancelled', cancelReason: event.reason }
+      default:
+        return state
+    }
+  }, initialState)
+}
+```
+
+This gives you a complete audit trail for free. Every state change is recorded, timestamped, and immutable. You can reconstruct the state of any order at any point in time. You can debug production issues by replaying the exact sequence of events that led to a problem. You can build new read models by replaying historical events through new projections.
+
+## Message Queues and Event Streams
+
+The infrastructure that makes event-driven architecture work is the message broker. Two patterns dominate: message queues and event streams. They serve different purposes.
+
+### Message Queues (RabbitMQ, SQS)
+
+A message queue delivers each message to exactly one consumer. Once consumed, the message is removed. This is appropriate for task distribution -- "process this payment" should happen once, not once per subscriber.
+
+### Event Streams (Kafka, Kinesis, Redpanda)
+
+An event stream retains messages for a configurable period (or indefinitely). Multiple consumers can read the same events independently, each maintaining their own offset. This is appropriate for event notification -- "order was placed" is a fact that multiple services need to know about.
+
+For commerce, you typically need both. Events like `ORDER_PLACED` go on a stream because inventory, payment, analytics, and notification services all need to react independently. Commands like `CHARGE_PAYMENT` go on a queue because they must be processed exactly once.
+
+```typescript
+// Publishing an event to a stream
+await eventStream.publish('orders', {
+  key: order.id,  // Partition key ensures ordering per order
+  value: {
+    type: 'ORDER_PLACED',
+    orderId: order.id,
+    items: order.items,
+    customerId: order.customerId,
+    timestamp: Date.now(),
+  },
+})
+
+// Each consumer processes independently
+// Inventory consumer
+eventStream.subscribe('orders', 'inventory-group', async (event) => {
+  if (event.type === 'ORDER_PLACED') {
+    await reserveInventory(event.orderId, event.items)
+  }
+})
+
+// Analytics consumer (different group, same stream)
+eventStream.subscribe('orders', 'analytics-group', async (event) => {
+  if (event.type === 'ORDER_PLACED') {
+    await recordOrderMetrics(event)
+  }
+})
+```
+
+The partition key is critical. By partitioning on `orderId`, you guarantee that all events for a given order are processed in sequence by the same consumer instance. This eliminates a large class of race conditions.
+
+## Eventual Consistency in Commerce
+
+Event-driven systems are eventually consistent. When a customer places an order, the inventory service might not have reserved stock yet. The payment service might not have captured funds yet. For a brief window, different services have different views of reality.
+
+This terrifies engineers accustomed to strong consistency. But commerce has always been eventually consistent. When you hand a cashier your credit card, the authorization is synchronous but the settlement is asynchronous. When you order from an e-commerce site, stock might be oversold between the time you added the item to your cart and the time you checked out.
+
+The key is making inconsistency windows small and handling conflicts gracefully.
+
+### Compensation Over Rollback
+
+In a synchronous system, if payment fails after inventory is reserved, you rollback the reservation in the same transaction. In an event-driven system, you emit a compensating event: `RESERVATION_CANCELLED`. Each service is responsible for handling compensating events for its own domain.
+
+> Distributed transactions are a lie we tell ourselves. Compensation is the truth we build with.
+
+## Saga Patterns for Order Orchestration
+
+A saga is a sequence of local transactions coordinated through events. Each step either succeeds (and emits a success event) or fails (and emits a compensating event that undoes previous steps). Two patterns exist: choreography and orchestration.
+
+### Choreography
+
+Each service listens for events and decides what to do next. There is no central coordinator. The order flow emerges from the interactions between services.
+
+This works well for simple flows (three or four steps) but becomes difficult to reason about as complexity grows. When something goes wrong, tracing the flow across six services through event logs requires tooling and patience.
+
+### Orchestration
+
+A central saga orchestrator manages the flow, issuing commands to services and reacting to their responses. The orchestrator contains the business logic for sequencing, compensation, and timeout handling.
+
+```typescript
+class OrderSaga {
+  private state: SagaState = 'STARTED'
+
+  async execute(order: Order): Promise<void> {
+    try {
+      // Step 1: Reserve inventory
+      await this.command('inventory', 'RESERVE', {
+        orderId: order.id,
+        items: order.items,
+      })
+      this.state = 'INVENTORY_RESERVED'
+
+      // Step 2: Process payment
+      await this.command('payment', 'CHARGE', {
+        orderId: order.id,
+        amount: order.total,
+        idempotencyKey: `saga-${order.id}-payment`,
+      })
+      this.state = 'PAYMENT_CAPTURED'
+
+      // Step 3: Arrange shipping
+      await this.command('shipping', 'CREATE_SHIPMENT', {
+        orderId: order.id,
+        address: order.shippingAddress,
+      })
+      this.state = 'SHIPMENT_CREATED'
+
+    } catch (error) {
+      await this.compensate(order.id)
+    }
+  }
+
+  private async compensate(orderId: string): Promise<void> {
+    // Compensate in reverse order
+    if (this.state === 'PAYMENT_CAPTURED' || this.state === 'SHIPMENT_CREATED') {
+      await this.command('payment', 'REFUND', { orderId })
+    }
+    if (this.state !== 'STARTED') {
+      await this.command('inventory', 'RELEASE', { orderId })
+    }
+    this.state = 'COMPENSATED'
+  }
+}
+```
+
+For most commerce systems, orchestration is the better choice. The flow is explicit, compensation logic is centralized, and debugging is straightforward -- you inspect the saga's state machine rather than correlating events across services.
+
+## Dead Letter Queues
+
+Events will fail to process. The consumer might crash, the database might be unavailable, the event payload might be malformed. Dead letter queues (DLQs) capture these failed events for later inspection and reprocessing.
+
+Every consumer must have a DLQ. The DLQ must be monitored. Unprocessed events in a DLQ represent business operations that did not complete -- orders not fulfilled, payments not captured, notifications not sent. A growing DLQ is not a technical problem. It is a business problem.
+
+```typescript
+async function processWithDLQ(event: OrderEvent): Promise<void> {
+  const maxRetries = 3
+  let attempt = 0
+
+  while (attempt < maxRetries) {
+    try {
+      await handleEvent(event)
+      return
+    } catch (error) {
+      attempt++
+      if (attempt < maxRetries) {
+        // Exponential backoff with jitter
+        const delay = Math.min(1000 * Math.pow(2, attempt) + Math.random() * 500, 30000)
+        await sleep(delay)
+      }
+    }
+  }
+
+  // All retries exhausted: send to DLQ
+  await dlq.publish({
+    originalEvent: event,
+    failureReason: error.message,
+    attempts: maxRetries,
+    timestamp: Date.now(),
+  })
+
+  metrics.increment('dlq.events.total', { event_type: event.type })
+}
+```
+
+## Idempotency
+
+In an event-driven system, events can be delivered more than once. Network partitions, consumer restarts, and rebalancing all cause redelivery. Every event handler must be idempotent -- processing the same event twice must produce the same result as processing it once.
+
+For payment operations, this is non-negotiable. Charging a customer twice because an event was redelivered is not a technical incident. It is a trust violation.
+
+The standard approach is an idempotency key store:
+
+```typescript
+async function idempotentHandler(event: OrderEvent): Promise<void> {
+  const idempotencyKey = `${event.type}-${event.orderId}-${event.timestamp}`
+
+  const alreadyProcessed = await idempotencyStore.exists(idempotencyKey)
+  if (alreadyProcessed) {
+    logger.info('duplicate_event_skipped', { key: idempotencyKey })
+    return
+  }
+
+  await handleEvent(event)
+  await idempotencyStore.set(idempotencyKey, { processedAt: Date.now() })
+}
+```
+
+The idempotency store must be checked and set atomically with the event processing. If the handler crashes after processing but before recording the key, the event will be reprocessed -- which is safe, because the handler is idempotent. If it crashes after recording but before acknowledging, the event will be redelivered but skipped on the second pass.
+
+## Monitoring Event Flows
+
+Monitoring an event-driven system requires different tooling than monitoring a request-response system. You need visibility into:
+
+- **Consumer lag**: How far behind is each consumer group? Increasing lag means the consumer cannot keep up with the event rate.
+- **Event throughput**: How many events per second are being published and consumed? Sudden drops indicate producer failures.
+- **Processing latency**: How long does it take from event publication to successful processing? This is the end-to-end latency that matters to the business.
+- **DLQ depth**: How many events are failing? This is the most important metric. A non-zero DLQ requires investigation.
+
+### Correlation and Tracing
+
+Every event must carry a correlation ID that traces it back to the originating request. When a customer reports that their order confirmation never arrived, you need to trace the flow: `ORDER_PLACED` (published at T1) -> `PAYMENT_CAPTURED` (processed at T2) -> `NOTIFICATION_REQUESTED` (published at T3) -> ... where did it stop?
+
+Without correlation IDs, this investigation takes hours. With them, it takes minutes.
+
+## Choosing the Right Architecture
+
+Event-driven architecture is not universally superior. It adds complexity -- more infrastructure, more failure modes, more cognitive overhead. For a simple CRUD application handling hundreds of requests per minute, request-response is the correct choice.
+
+But for commerce systems that must handle:
+
+- **Bursty traffic** (flash sales, product launches, seasonal peaks)
+- **Multi-service coordination** (inventory, payment, shipping, fraud)
+- **Audit requirements** (financial compliance, dispute resolution)
+- **Independent scaling** (scale payment processing without scaling inventory)
+
+Event-driven architecture is not an optimization. It is a requirement.
+
+The patterns described here -- event sourcing, sagas, idempotency, dead letter queues -- are not theoretical. They are the standard toolkit for building commerce systems that work under real-world conditions. We apply these patterns across [the systems we build for clients](/work), and they form a core part of [our technical capabilities](/capabilities) in commerce and platform engineering.
+
+The shift from request-response to event-driven is not just a technical migration. It is a change in how you think about system behavior. Systems stop being sequences of operations and become networks of reactions. This mental model is harder to acquire but produces architectures that are more resilient, more scalable, and more aligned with how commerce actually works.
