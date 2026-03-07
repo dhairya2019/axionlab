@@ -1,53 +1,54 @@
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion/MotionWrapper";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   const systems = [
-    { 
+    {
       id: "SYST-01",
-      name: "Dify.ai", 
+      name: "Dify.ai",
       classification: "Agent Orchestration",
       deployment: "Global / Cloud",
       architecture: "Recursive Context Layer",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" 
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800"
     },
-    { 
+    {
       id: "SYST-02",
-      name: "LlamaIndex", 
+      name: "LlamaIndex",
       classification: "Data Framework",
       deployment: "Enterprise / Private",
       architecture: "Vector-Store Agnostic",
       image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=800"
     },
-    { 
+    {
       id: "SYST-03",
-      name: "Langflow", 
+      name: "Langflow",
       classification: "Workflow Engine",
       deployment: "Hybrid / Edge",
       architecture: "Directed Acyclic Graph",
       image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80&w=800"
     },
-    { 
+    {
       id: "SYST-04",
-      name: "True Corp", 
+      name: "True Corp",
       classification: "Telecomm Mesh",
       deployment: "National (Thailand)",
       architecture: "Microservices Integration",
       image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
     },
-    { 
+    {
       id: "SYST-05",
-      name: "Almost Gods", 
+      name: "Almost Gods",
       classification: "Commerce Infra",
       deployment: "Global / Retail",
       architecture: "Headless Checkout Tunnel",
       image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=800"
     },
-    { 
+    {
       id: "SYST-06",
-      name: "MetaPOS", 
+      name: "MetaPOS",
       classification: "Retail Intelligence",
       deployment: "Regional / Physical",
       architecture: "Real-time BI Layer",
@@ -71,16 +72,16 @@ export default function Home() {
             We embed. We analyze. We architect. We execute. <br />
             Systems engineered from within the ecosystems they serve.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-0 border border-white/10 w-fit">
-            <a 
-              href="#/initiate" 
+            <Link
+              href="/initiate"
               className="bg-accent text-white px-12 py-8 text-[11px] font-black uppercase tracking-[0.4em] inline-flex items-center justify-center gap-6 hover:bg-white hover:text-black transition-all"
             >
               Initiate System <ArrowRight size={14} />
-            </a>
-            <a 
-              href="#systems" 
+            </Link>
+            <a
+              href="#systems"
               className="bg-transparent border-l border-white/10 text-white px-12 py-8 text-[11px] font-black uppercase tracking-[0.4em] hover:bg-white/5 transition-all text-center"
             >
               View Classifications
@@ -111,15 +112,15 @@ export default function Home() {
         <h2 className="text-[10px] text-accent font-bold uppercase tracking-[0.6em] mb-20 border-b border-white/10 pb-6">System Classifications</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
           {systems.map((system, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="relative bg-background group overflow-hidden min-h-[550px] flex flex-col justify-end p-10"
             >
               {/* Image Layer */}
               <div className="absolute inset-0 z-0">
-                <img 
-                  src={system.image} 
-                  alt={system.name} 
+                <img
+                  src={system.image}
+                  alt={system.name}
                   className="w-full h-full object-cover grayscale opacity-10 group-hover:opacity-30 transition-all duration-1000"
                 />
               </div>
@@ -152,12 +153,12 @@ export default function Home() {
                   </div>
                 </div>
 
-                <a 
-                  href="#/work" 
+                <Link
+                  href="/work"
                   className="inline-flex items-center gap-3 text-accent text-[10px] font-black uppercase tracking-[0.4em] hover:text-white transition-colors pt-6"
                 >
                   Retrieve Dossier <ArrowRight size={12} />
-                </a>
+                </Link>
               </div>
             </div>
           ))}
