@@ -30,11 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Framer Motion page animations play on all pages; browser network tab shows zero requests to fonts.googleapis.com
   5. Navigating to /#/work in a browser redirects to /work; a custom 404 page appears for invalid paths
 **Plans**: 5 plans
-- [ ] 01-01-PLAN.md — Build system foundation (vercel.json, package.json, tsconfig, postcss, next.config)
-- [ ] 01-02-PLAN.md — Tailwind v4 @theme with canonical colors + layout.tsx with next/font and hash redirect
-- [ ] 01-03-PLAN.md — API route migration (chat + send-email Route Handlers)
+- [x] 01-01-PLAN.md — Build system foundation (vercel.json, package.json, tsconfig, postcss, next.config)
+- [x] 01-02-PLAN.md — Tailwind v4 @theme with canonical colors + layout.tsx with next/font and hash redirect
+- [x] 01-03-PLAN.md — API route migration (chat + send-email Route Handlers)
 - [x] 01-04-PLAN.md — Navigation, MotionWrapper, Chatbot, Footer, all pages, and 404 page
-- [ ] 01-05-PLAN.md — Legacy file cleanup + next build verification + visual sign-off
+- [x] 01-05-PLAN.md — Legacy file cleanup + next build verification + visual sign-off
 
 ### Phase 2: Blog Infrastructure
 **Goal**: The Insights section is a functional MDX blog at /insights with a listing page, individual post pages generated at build time, syntax-highlighted code blocks, prose typography in the AXIONLAB design language, and tag-based filtering

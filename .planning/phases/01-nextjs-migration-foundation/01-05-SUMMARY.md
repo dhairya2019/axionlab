@@ -57,19 +57,19 @@ requirements-completed: [MIG-05]
 
 # Metrics
 duration: 10min
-completed: 2026-03-07
+completed: 2026-03-08
 ---
 
 # Phase 1 Plan 5: Legacy Cleanup and Build Verification Summary
 
-**Deleted 13 legacy Vite/SPA files and fixed framer-motion v12 prerender error to achieve successful `next build` completing Phase 1 migration**
+**Deleted 13 legacy Vite/SPA files, fixed framer-motion v12 prerender error, and achieved human-verified successful `next build` — completing Phase 1 Next.js migration**
 
 ## Performance
 
 - **Duration:** ~10 min
 - **Started:** 2026-03-07T18:48:31Z
-- **Completed:** 2026-03-07T18:58:00Z
-- **Tasks:** 2 of 3 complete (Task 3 is checkpoint:human-verify)
+- **Completed:** 2026-03-08 (checkpoint approved)
+- **Tasks:** 3 of 3 complete
 - **Files modified:** 15 deleted + 2 modified
 
 ## Accomplishments
@@ -77,7 +77,7 @@ completed: 2026-03-07
 - Diagnosed and fixed framer-motion v12 prerender error: added `'use client'` to app/page.tsx
 - Added `transpilePackages: ['framer-motion']` to next.config.mjs for Turbopack compatibility
 - `next build` completes successfully: 7 static pages + 2 dynamic API routes + not-found page
-- Phase 1 Next.js migration is complete pending human visual verification
+- Phase 1 Next.js migration is complete — human visual verification approved
 
 ## Task Commits
 
@@ -85,7 +85,7 @@ Each task was committed atomically:
 
 1. **Task 1: Delete legacy Vite and SPA files** - `493b42b` (chore)
 2. **Task 2: Run next build and fix build errors** - `1f71e8f` (fix)
-3. **Task 3: Visual verification** - Awaiting human checkpoint
+3. **Task 3: Visual verification (checkpoint:human-verify)** - Approved by human (no code commit — verification only)
 
 ## Files Created/Modified
 - `app/page.tsx` - Added `'use client'` directive (framer-motion requirement)
@@ -119,13 +119,34 @@ Each task was committed atomically:
 ## User Setup Required
 None - no external service configuration required.
 
+## Visual Verification Results (Human-Approved)
+- All 7 pages render at clean URLs (/, /philosophy, /capabilities, /work, /insights, /careers, /initiate)
+- Background confirmed rgb(8, 8, 8) = #080808
+- Zero Google Fonts CDN requests — Inter loads via next/font from /_next/ paths
+- Custom 404 "Signal Lost." page works for invalid paths
+- Hash redirect script present and functional (/#/work redirects to /work)
+- Chatbot widget visible and functional
+- Contact form on /initiate renders correctly
+- next build: 7 static pages, 2 dynamic API routes, custom 404 — zero errors
+
 ## Next Phase Readiness
-- Phase 1 complete: Next.js App Router migration fully done
-- Clean codebase: no Vite artifacts, all legacy files removed
+- Phase 1 complete and human-verified: Next.js App Router migration fully done
+- Clean codebase: no Vite artifacts, all 13 legacy files removed
 - Build verified: `next build` succeeds with zero errors
 - Ready for Phase 2: Blog/MDX system implementation
-- Awaiting human visual verification (Task 3 checkpoint) to confirm site renders correctly in browser
+- Known Phase 2 risk: Turbopack + rehype-pretty-code compatibility uncertain — test early; fall back to --webpack if needed
+- Note for all future pages using motion.*: must declare 'use client' — framer-motion v12 breaking change
 
 ---
 *Phase: 01-nextjs-migration-foundation*
-*Completed: 2026-03-07*
+*Completed: 2026-03-08*
+
+## Self-Check: PASSED
+
+| Item | Status |
+|------|--------|
+| 01-05-SUMMARY.md | FOUND |
+| Commit 493b42b (Task 1 - delete legacy files) | FOUND |
+| Commit 1f71e8f (Task 2 - fix build errors) | FOUND |
+| Commit 70dc3d6 (Plan metadata) | FOUND |
+| Human visual verification: approved | CONFIRMED |
