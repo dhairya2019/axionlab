@@ -95,7 +95,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Every page response includes a `<link rel="canonical">` pointing to its canonical https://axionlab.in/... URL
   4. Sharing any axionlab.in URL on Slack, LinkedIn, or X renders the branded OG image with the page title and description
   5. A site owner following the GSC documentation can complete Search Console verification and submit the sitemap without needing to ask Claude for help
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 05-01-PLAN.md — H1 fixes (Nav h1 to span), canonical URLs on all pages, homepage meta description keywords
+- [ ] 05-02-PLAN.md — JSON-LD structured data (Organization + WebSite + Article), branded OG image, GSC setup docs
 
 ### Phase 6: Content & Internal Linking
 **Goal**: axionlab.in has a content graph of 10+ SEO-optimised blog posts that target niche long-tail keywords across six defined clusters, with every post linking into service pages and every service page linking back to related posts — no orphan pages exist and every link uses descriptive anchor text with keyword-rich alt text on all images
@@ -131,6 +133,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Blog Infrastructure | 4/4 | Complete | 2026-03-08 |
 | 3. SEO and Metadata | 2/2 | Complete | 2026-03-08 |
 | 4. Blog Enhancements | 2/2 | Complete | 2026-03-08 |
-| 5. Technical SEO Foundation | 0/TBD | Not started | - |
+| 5. Technical SEO Foundation | 0/2 | Planning complete | - |
 | 6. Content & Internal Linking | 0/TBD | Not started | - |
 | 7. Performance SEO | 0/TBD | Not started | - |
