@@ -29,7 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The AI chatbot widget sends messages and receives Gemini responses; the Initiate contact form submits without error
   4. Framer Motion page animations play on all pages; browser network tab shows zero requests to fonts.googleapis.com
   5. Navigating to /#/work in a browser redirects to /work; a custom 404 page appears for invalid paths
-**Plans**: TBD
+**Plans**: 5 plans
+- [ ] 01-01-PLAN.md — Build system foundation (vercel.json, package.json, tsconfig, postcss, next.config)
+- [ ] 01-02-PLAN.md — Tailwind v4 @theme with canonical colors + layout.tsx with next/font and hash redirect
+- [ ] 01-03-PLAN.md — API route migration (chat + send-email Route Handlers)
+- [ ] 01-04-PLAN.md — Navigation, MotionWrapper, Chatbot, Footer, all pages, and 404 page
+- [ ] 01-05-PLAN.md — Legacy file cleanup + next build verification + visual sign-off
 
 ### Phase 2: Blog Infrastructure
 **Goal**: The Insights section is a functional MDX blog at /insights with a listing page, individual post pages generated at build time, syntax-highlighted code blocks, prose typography in the AXIONLAB design language, and tag-based filtering
@@ -71,7 +76,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Next.js Migration Foundation | 0/TBD | Not started | - |
+| 1. Next.js Migration Foundation | 0/5 | Not started | - |
 | 2. Blog Infrastructure | 0/TBD | Not started | - |
 | 3. SEO and Metadata | 0/TBD | Not started | - |
 | 4. Blog Enhancements | 0/TBD | Not started | - |
