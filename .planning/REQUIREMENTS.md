@@ -10,8 +10,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Migration Foundation
 
 - [x] **MIG-01**: Site builds and runs on Next.js App Router (replaces Vite + hash routing)
-- [ ] **MIG-02**: Tailwind CSS processes via PostCSS with unified color config (#080808 background)
-- [ ] **MIG-03**: Fonts load via next/font (Inter + Inter Tight) with zero layout shift
+- [x] **MIG-02**: Tailwind CSS processes via PostCSS with unified color config (#080808 background)
+- [x] **MIG-03**: Fonts load via next/font (Inter + Inter Tight) with zero layout shift
 - [x] **MIG-04**: vercel.json updated for Next.js framework (not Vite)
 - [ ] **MIG-05**: Legacy files cleaned up (index.html, index.tsx, vite configs, unused components)
 
@@ -20,7 +20,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **RTG-01**: All 7 pages accessible at clean URLs (/philosophy, /capabilities, /work, /insights, /careers, /initiate)
 - [ ] **RTG-02**: Navigation (Nav component) uses next/link with usePathname for active state
 - [ ] **RTG-03**: Footer uses next/link for internal navigation
-- [ ] **RTG-04**: Old hash URLs (/#/work) redirect to clean URLs (/work) via client-side script
+- [x] **RTG-04**: Old hash URLs (/#/work) redirect to clean URLs (/work) via client-side script
 - [ ] **RTG-05**: Custom 404 page in AXIONLAB design language
 
 ### Page Rendering
@@ -28,7 +28,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **RND-01**: Static pages (Philosophy, Capabilities, Work, Careers) render as Server Components
 - [ ] **RND-02**: Interactive pages (Home, Initiate) use "use client" with Framer Motion wrappers
 - [ ] **RND-03**: Chatbot component works as client component with existing /api/chat endpoint
-- [ ] **RND-04**: Root layout (app/layout.tsx) wraps all pages with Nav, Chatbot, Footer
+- [x] **RND-04**: Root layout (app/layout.tsx) wraps all pages with Nav, Chatbot, Footer
 
 ### SEO
 
@@ -98,19 +98,19 @@ Deferred to future release. Tracked but not in current roadmap.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | MIG-01 | Phase 1 | Complete |
-| MIG-02 | Phase 1 | Pending |
-| MIG-03 | Phase 1 | Pending |
+| MIG-02 | Phase 1 | Complete |
+| MIG-03 | Phase 1 | Complete |
 | MIG-04 | Phase 1 | Complete |
 | MIG-05 | Phase 1 | Pending |
 | RTG-01 | Phase 1 | Pending |
 | RTG-02 | Phase 1 | Pending |
 | RTG-03 | Phase 1 | Pending |
-| RTG-04 | Phase 1 | Pending |
+| RTG-04 | Phase 1 | Complete |
 | RTG-05 | Phase 1 | Pending |
 | RND-01 | Phase 1 | Pending |
 | RND-02 | Phase 1 | Pending |
 | RND-03 | Phase 1 | Pending |
-| RND-04 | Phase 1 | Pending |
+| RND-04 | Phase 1 | Complete |
 | API-01 | Phase 1 | Complete |
 | API-02 | Phase 1 | Complete |
 | API-03 | Phase 1 | Complete |

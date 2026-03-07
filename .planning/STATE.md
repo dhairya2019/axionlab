@@ -50,6 +50,9 @@ Recent decisions affecting current work:
 - [01-01]: postcss.config.mjs (not .js) required because project has type:module — ESM native avoids require() parse errors
 - [01-01]: Tailwind v4 @tailwindcss/postcss eliminates need for separate autoprefixer
 - [01-01]: tsconfig moduleResolution:bundler required for Next.js App Router — Node resolution causes false TS errors with RSC imports
+- [01-02]: next/font replaces Google Fonts CDN — CSS variables wired as --font-inter/--font-inter-tight on <html>, consumed by @theme block
+- [01-02]: Hash redirect uses dangerouslySetInnerHTML inline script (not next/script afterInteractive) — must run synchronously before hydration
+- [01-02]: CDN color values (#080808 bg, #666666 muted, #111111 surface) now canonical in @theme — not tailwind.config.js values
 - [01-03]: Gemini model configurable via GEMINI_MODEL env var with gemini-2.0-flash fallback — unstable preview model risk from blockers now resolved
 - [01-03]: Web standard Response.json() used instead of NextResponse.json() — portable, no import required, functionally identical in App Router
 
