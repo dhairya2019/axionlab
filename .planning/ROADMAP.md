@@ -12,7 +12,7 @@ This roadmap migrates the AXIONLAB website from a Vite SPA with hash-based routi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs
+- [x] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs (completed 2026-03-07)
 - [ ] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering
 - [ ] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility
 - [ ] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation
@@ -76,7 +76,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Next.js Migration Foundation | 4/5 | In Progress|  |
+| 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
 | 2. Blog Infrastructure | 0/TBD | Not started | - |
 | 3. SEO and Metadata | 0/TBD | Not started | - |
 | 4. Blog Enhancements | 0/TBD | Not started | - |

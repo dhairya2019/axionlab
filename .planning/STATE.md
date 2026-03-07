@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
-**Current focus:** Phase 1 — Next.js Migration Foundation
+**Current focus:** Phase 1 complete — Awaiting human visual verification (Task 3 checkpoint)
 
 ## Current Position
 
 Phase: 1 of 4 (Next.js Migration Foundation)
-Plan: 4 of 5 in current phase
-Status: In progress
-Last activity: 2026-03-07 — Completed plan 01-04 (Component and page migration — MotionWrapper, Nav, Footer, all 7 pages, 404)
+Plan: 5 of 5 in current phase — COMPLETE (pending human verify)
+Status: Checkpoint:human-verify — awaiting visual verification before Phase 2
+Last activity: 2026-03-07 — Completed plan 01-05 (Legacy cleanup and next build verification)
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 1.5 min
-- Total execution time: 0.09 hours
+- Total plans completed: 5
+- Average duration: 2.0 min
+- Total execution time: 0.18 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-nextjs-migration-foundation | 4 | 7 min | 1.75 min |
+| 01-nextjs-migration-foundation | 5 | 17 min | 3.4 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (1 min), 01-03 (1 min), 01-04 (3 min)
-- Trend: -
+- Last 5 plans: 01-01 (2 min), 01-02 (1 min), 01-03 (1 min), 01-04 (3 min), 01-05 (10 min)
+- Trend: Variable (01-05 required build error diagnosis)
 
 *Updated after each plan completion*
 
@@ -58,6 +58,8 @@ Recent decisions affecting current work:
 - [01-04]: MotionWrapper thin re-export pattern — 'use client' wrapper for framer-motion allows Server Component pages to use motion.* without client boundary on page itself
 - [01-04]: Footer is Server Component — next/link works in Server Components, no 'use client' needed just for Link
 - [01-04]: Same-page anchor href="#systems" kept as <a> — only inter-page routes use next/link Link component
+- [01-05]: app/page.tsx needs 'use client' — framer-motion v12 motion proxy requires client context during static prerendering, even when imported from a 'use client' MotionWrapper
+- [01-05]: transpilePackages: ['framer-motion'] added to next.config.mjs — Turbopack bundler compatibility with framer-motion v12
 
 ### Pending Todos
 
@@ -67,12 +69,14 @@ None yet.
 
 - [Phase 1 risk RESOLVED]: vercel.json framework:vite removed — now auto-detects Next.js
 - [Phase 1 risk RESOLVED]: Framer Motion crash risk — MotionWrapper with "use client" created in 01-04, all pages updated
+- [Phase 1 risk RESOLVED]: Legacy Vite files cleaned up — all 13 files deleted in 01-05
+- [Phase 1 risk RESOLVED]: next build succeeded — all 7 pages + 2 API routes compile
 - [Phase 2 risk]: Turbopack + rehype-pretty-code compatibility uncertain — test early in Phase 2; fall back to --webpack if Shiki options are non-serializable
 - [Phase 2 risk RESOLVED]: API route chat.js unstable gemini-3-flash-preview model replaced with configurable GEMINI_MODEL env var defaulting to gemini-2.0-flash
-- [Deferred from 01-01]: tailwind.config.js, vite.config.js, vite.config.ts still present but unused — clean up in Plan 05
+- [Note for Phase 2]: Pages using motion.* must declare 'use client' — framer-motion v12 breaking change from v10/v11
 
 ## Session Continuity
 
 Last session: 2026-03-07
-Stopped at: Completed 01-04-PLAN.md — Component and page migration (MotionWrapper, Nav, Footer, all pages, 404)
+Stopped at: Completed 01-05-PLAN.md tasks 1+2 — at checkpoint:human-verify (Task 3), waiting for visual verification
 Resume file: None

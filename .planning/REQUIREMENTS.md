@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MIG-02**: Tailwind CSS processes via PostCSS with unified color config (#080808 background)
 - [x] **MIG-03**: Fonts load via next/font (Inter + Inter Tight) with zero layout shift
 - [x] **MIG-04**: vercel.json updated for Next.js framework (not Vite)
-- [ ] **MIG-05**: Legacy files cleaned up (index.html, index.tsx, vite configs, unused components)
+- [x] **MIG-05**: Legacy files cleaned up (index.html, index.tsx, vite configs, unused components)
 
 ### Page Routing
 
@@ -101,7 +101,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | MIG-02 | Phase 1 | Complete |
 | MIG-03 | Phase 1 | Complete |
 | MIG-04 | Phase 1 | Complete |
-| MIG-05 | Phase 1 | Pending |
+| MIG-05 | Phase 1 | Complete |
 | RTG-01 | Phase 1 | Complete |
 | RTG-02 | Phase 1 | Complete |
 | RTG-03 | Phase 1 | Complete |
