@@ -1,142 +1,115 @@
-# Requirements: AXIONLAB Website Migration
+# Requirements: AXIONLAB SEO & Discoverability
 
-**Defined:** 2026-03-07
-**Core Value:** Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
+**Defined:** 2026-03-08
+**Core Value:** AXIONLAB must rank on the first page of Google for its brand name and target service keywords.
 
-## v1 Requirements
+## v1.0 Requirements (Complete)
 
-Requirements for initial release. Each maps to roadmap phases.
+All v1.0 requirements shipped. See MILESTONES.md for details.
 
-### Migration Foundation
+- ✓ MIG-01 through MIG-05: Next.js migration foundation
+- ✓ RTG-01 through RTG-05: Page routing
+- ✓ RND-01 through RND-04: Page rendering
+- ✓ SEO-01 through SEO-04: Basic SEO metadata
+- ✓ API-01 through API-03: API routes
+- ✓ BLG-01 through BLG-10: Blog infrastructure
+- ✓ BLE-01 through BLE-03: Blog enhancements
 
-- [x] **MIG-01**: Site builds and runs on Next.js App Router (replaces Vite + hash routing)
-- [x] **MIG-02**: Tailwind CSS processes via PostCSS with unified color config (#080808 background)
-- [x] **MIG-03**: Fonts load via next/font (Inter + Inter Tight) with zero layout shift
-- [x] **MIG-04**: vercel.json updated for Next.js framework (not Vite)
-- [x] **MIG-05**: Legacy files cleaned up (index.html, index.tsx, vite configs, unused components)
+## v2.0 Requirements
 
-### Page Routing
+Requirements for SEO & Discoverability milestone. Each maps to roadmap phases.
 
-- [x] **RTG-01**: All 7 pages accessible at clean URLs (/philosophy, /capabilities, /work, /insights, /careers, /initiate)
-- [x] **RTG-02**: Navigation (Nav component) uses next/link with usePathname for active state
-- [x] **RTG-03**: Footer uses next/link for internal navigation
-- [x] **RTG-04**: Old hash URLs (/#/work) redirect to clean URLs (/work) via client-side script
-- [x] **RTG-05**: Custom 404 page in AXIONLAB design language
+### Technical SEO
 
-### Page Rendering
+- [ ] **TSEO-01**: Every page has JSON-LD structured data (Organization on homepage, Article on blog posts, WebSite with SearchAction)
+- [ ] **TSEO-02**: Every page has exactly one H1 tag that contains the primary keyword for that page
+- [ ] **TSEO-03**: Every page has a canonical URL meta tag pointing to its canonical https://axionlab.in/... URL
+- [ ] **TSEO-04**: Every page has an OG image meta tag with a branded social sharing image
+- [ ] **TSEO-05**: Homepage meta description contains primary brand keywords ("systems engineering", "commerce infrastructure", "AI agent systems")
+- [ ] **TSEO-06**: All internal links use descriptive anchor text (not "click here" or "read more")
+- [ ] **TSEO-07**: All images have descriptive alt text containing relevant keywords
 
-- [x] **RND-01**: Static pages (Philosophy, Capabilities, Work, Careers) render as Server Components
-- [x] **RND-02**: Interactive pages (Home, Initiate) use "use client" with Framer Motion wrappers
-- [x] **RND-03**: Chatbot component works as client component with existing /api/chat endpoint
-- [x] **RND-04**: Root layout (app/layout.tsx) wraps all pages with Nav, Chatbot, Footer
+### Content SEO
 
-### SEO
+- [ ] **CSEO-01**: At least 10 blog posts published, each targeting a specific long-tail keyword
+- [ ] **CSEO-02**: Each blog post is 1000+ words with proper heading hierarchy (H2, H3)
+- [ ] **CSEO-03**: Each blog post has a unique meta description under 160 characters containing the target keyword
+- [ ] **CSEO-04**: Each blog post internally links to at least one service page (/capabilities, /work, /philosophy)
+- [ ] **CSEO-05**: Each service page links to at least 2 related blog posts
+- [ ] **CSEO-06**: Blog posts target these keyword clusters: commerce infrastructure, AI agent development, high-performance APIs, systems architecture consulting, Next.js development, software engineering India
 
-- [ ] **SEO-01**: Each page exports unique metadata (title, description, OpenGraph, Twitter cards)
-- [ ] **SEO-02**: Root layout sets metadataBase for absolute OG URLs
-- [ ] **SEO-03**: sitemap.ts auto-generates /sitemap.xml including all pages and blog posts
-- [ ] **SEO-04**: robots.ts auto-generates /robots.txt allowing all crawlers
+### Indexing & Crawling
 
-### API Routes
+- [ ] **INDX-01**: Google Search Console verification instructions documented for site owner
+- [ ] **INDX-02**: Sitemap.xml includes all pages with accurate lastModified dates
+- [ ] **INDX-03**: Robots.txt correctly allows all crawlers and references sitemap
+- [ ] **INDX-04**: No orphan pages (every page reachable within 3 clicks from homepage)
 
-- [x] **API-01**: /api/chat migrated to Next.js Route Handler (app/api/chat/route.ts)
-- [x] **API-02**: /api/send-email migrated to Next.js Route Handler (app/api/send-email/route.ts)
-- [x] **API-03**: Client-side fetch URLs unchanged — chatbot and contact form work without frontend changes
+### Performance SEO
 
-### Blog Infrastructure
+- [ ] **PERF-01**: Largest Contentful Paint (LCP) under 2.5 seconds on mobile
+- [ ] **PERF-02**: Cumulative Layout Shift (CLS) under 0.1
+- [ ] **PERF-03**: No render-blocking resources that delay First Contentful Paint
+- [ ] **PERF-04**: All images use next/image with proper sizing and lazy loading
 
-- [ ] **BLG-01**: MDX files in content/blog/ with frontmatter (title, date, description, tags, author)
-- [ ] **BLG-02**: Blog listing page at /insights renders post cards from filesystem scan
-- [ ] **BLG-03**: Individual post pages at /insights/[slug] with SSG via generateStaticParams
-- [ ] **BLG-04**: Prose typography via @tailwindcss/typography with AXIONLAB theme overrides
-- [ ] **BLG-05**: Syntax-highlighted code blocks via rehype-pretty-code + Shiki
-- [ ] **BLG-06**: Reading time estimate displayed per post
-- [ ] **BLG-07**: Tag-based filtering on listing page (client-side)
-- [ ] **BLG-08**: Per-post SEO metadata (title, description, OG tags from frontmatter)
-- [ ] **BLG-09**: Blog posts auto-included in sitemap.ts
-- [ ] **BLG-10**: mdx-components.tsx at project root for global MDX component registry
+## v2.1 Requirements (Future)
 
-### Blog Enhancements
+### Authority Building
 
-- [ ] **BLE-01**: Code block copy-to-clipboard button on all code blocks
-- [ ] **BLE-02**: Custom MDX callout components (Info, Warning, Tip) in AXIONLAB design language
-- [ ] **BLE-03**: Post-to-post navigation (prev/next links at bottom of each post)
+- **AUTH-01**: Company profiles on GitHub, LinkedIn, Twitter/X with links back to axionlab.in
+- **AUTH-02**: Cross-posting summaries on Medium/Dev.to with canonical URLs
+- **AUTH-03**: Directory listings on Clutch.co, GoodFirms, TopDevelopers
 
-## v2 Requirements
+### Advanced SEO
 
-Deferred to future release. Tracked but not in current roadmap.
-
-### Blog Enhancements
-
-- **BLE-04**: Dynamic OG image generation per post (next/og ImageResponse)
-- **BLE-05**: Table of contents for long posts (rehype-slug + sidebar)
-- **BLE-06**: next/image optimization for MDX inline images
-- **BLE-07**: Canonical URL in metadata for syndication protection
-
-### Content & Discovery
-
-- **DSC-01**: RSS feed generation for blog posts
-- **DSC-02**: Search functionality on blog listing (when post count > 30)
-- **DSC-03**: Pagination on listing page (when post count > 30)
+- **ASEO-01**: RSS feed at /feed.xml for content syndication
+- **ASEO-02**: Table of contents component for long blog posts
+- **ASEO-03**: Related posts component at bottom of each blog post
+- **ASEO-04**: Google Analytics 4 integration for traffic monitoring
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Visual redesign | Keep existing design system intact — migration only |
-| CMS integration | File-based MDX is simpler, free, version-controlled |
-| Comments on posts | Requires moderation, backend storage, spam management |
-| Newsletter signup | Complicates CTA hierarchy — existing contact form is sufficient |
-| Like/reaction buttons | Requires persistent storage (no DB on Vercel free plan) |
-| View counts/analytics | Requires storage — use Vercel Analytics passively instead |
-| Dark/light toggle | AXIONLAB brand is dark-only by design |
-| ISR | Vercel free plan — SSG + rebuild on deploy is sufficient |
-| User authentication | Site is public-facing only |
+| Paid advertising | Organic-only strategy for v2.0 |
+| Link building outreach | Focus on-site SEO first, authority building in v2.1 |
+| Multilingual content | English only, single market |
+| AMP pages | Deprecated by Google, not needed |
+| Schema.org FAQ/HowTo | Overkill for current content type |
+| Video SEO | No video content planned |
+| CMS integration | File-based MDX is sufficient |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MIG-01 | Phase 1 | Complete |
-| MIG-02 | Phase 1 | Complete |
-| MIG-03 | Phase 1 | Complete |
-| MIG-04 | Phase 1 | Complete |
-| MIG-05 | Phase 1 | Complete |
-| RTG-01 | Phase 1 | Complete |
-| RTG-02 | Phase 1 | Complete |
-| RTG-03 | Phase 1 | Complete |
-| RTG-04 | Phase 1 | Complete |
-| RTG-05 | Phase 1 | Complete |
-| RND-01 | Phase 1 | Complete |
-| RND-02 | Phase 1 | Complete |
-| RND-03 | Phase 1 | Complete |
-| RND-04 | Phase 1 | Complete |
-| API-01 | Phase 1 | Complete |
-| API-02 | Phase 1 | Complete |
-| API-03 | Phase 1 | Complete |
-| BLG-01 | Phase 2 | Pending |
-| BLG-02 | Phase 2 | Pending |
-| BLG-03 | Phase 2 | Pending |
-| BLG-04 | Phase 2 | Pending |
-| BLG-05 | Phase 2 | Pending |
-| BLG-06 | Phase 2 | Pending |
-| BLG-07 | Phase 2 | Pending |
-| BLG-08 | Phase 2 | Pending |
-| BLG-09 | Phase 2 | Pending |
-| BLG-10 | Phase 2 | Pending |
-| SEO-01 | Phase 3 | Pending |
-| SEO-02 | Phase 3 | Pending |
-| SEO-03 | Phase 3 | Pending |
-| SEO-04 | Phase 3 | Pending |
-| BLE-01 | Phase 4 | Pending |
-| BLE-02 | Phase 4 | Pending |
-| BLE-03 | Phase 4 | Pending |
+| TSEO-01 | Phase 5 | Pending |
+| TSEO-02 | Phase 5 | Pending |
+| TSEO-03 | Phase 5 | Pending |
+| TSEO-04 | Phase 5 | Pending |
+| TSEO-05 | Phase 5 | Pending |
+| TSEO-06 | Phase 6 | Pending |
+| TSEO-07 | Phase 6 | Pending |
+| CSEO-01 | Phase 6 | Pending |
+| CSEO-02 | Phase 6 | Pending |
+| CSEO-03 | Phase 6 | Pending |
+| CSEO-04 | Phase 6 | Pending |
+| CSEO-05 | Phase 6 | Pending |
+| CSEO-06 | Phase 6 | Pending |
+| INDX-01 | Phase 5 | Pending |
+| INDX-02 | Phase 5 | Pending |
+| INDX-03 | Phase 5 | Pending |
+| INDX-04 | Phase 6 | Pending |
+| PERF-01 | Phase 7 | Pending |
+| PERF-02 | Phase 7 | Pending |
+| PERF-03 | Phase 7 | Pending |
+| PERF-04 | Phase 7 | Pending |
 
 **Coverage:**
-- v1 requirements: 34 total
-- Mapped to phases: 34
-- Unmapped: 0
+- v2.0 requirements: 21 total
+- Mapped to phases: 21
+- Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-03-07*
-*Last updated: 2026-03-07 after roadmap creation*
+*Requirements defined: 2026-03-08*
+*Last updated: 2026-03-08 after initial definition*
