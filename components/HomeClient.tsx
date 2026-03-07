@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "@/components/motion/MotionWrapper";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export default function HomeClient() {
@@ -118,10 +119,13 @@ export default function HomeClient() {
             >
               {/* Image Layer */}
               <div className="absolute inset-0 z-0">
-                <img
+                <Image
                   src={system.image}
-                  alt={system.name}
-                  className="w-full h-full object-cover grayscale opacity-10 group-hover:opacity-30 transition-all duration-1000"
+                  alt={`${system.name} — AXIONLAB system classification`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover grayscale opacity-10 group-hover:opacity-30 transition-all duration-1000"
+                  loading="lazy"
                 />
               </div>
 

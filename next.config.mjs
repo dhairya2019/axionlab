@@ -9,6 +9,14 @@ import { visit } from 'unist-util-visit'
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   transpilePackages: ['framer-motion'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
 }
 
 // Reconstruct raw code text from tokenized spans AFTER rehype-pretty-code runs.
