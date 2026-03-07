@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -15,21 +16,21 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 sm:flex flex-wrap gap-x-12 gap-y-6 text-[10px] uppercase font-black tracking-[0.3em]">
           <div className="flex flex-col gap-4">
              <p className="text-accent mb-2">Navigation</p>
-             <a href="#/philosophy" className="hover:text-white text-muted transition-colors">Philosophy</a>
-             <a href="#/capabilities" className="hover:text-white text-muted transition-colors">Capabilities</a>
+             <Link href="/philosophy" className="hover:text-white text-muted transition-colors">Philosophy</Link>
+             <Link href="/capabilities" className="hover:text-white text-muted transition-colors">Capabilities</Link>
           </div>
           <div className="flex flex-col gap-4">
              <p className="text-accent mb-2">Systems</p>
-             <a href="#/work" className="hover:text-white text-muted transition-colors">Work Dossier</a>
-             <a href="#/insights" className="hover:text-white text-muted transition-colors">Insights</a>
+             <Link href="/work" className="hover:text-white text-muted transition-colors">Work Dossier</Link>
+             <Link href="/insights" className="hover:text-white text-muted transition-colors">Insights</Link>
           </div>
           <div className="flex flex-col gap-4">
              <p className="text-accent mb-2">Contact</p>
-             <a href="#/initiate" className="hover:text-white text-muted transition-colors">Initiate</a>
+             <Link href="/initiate" className="hover:text-white text-muted transition-colors">Initiate</Link>
              <a href="mailto:support@axionlab.in" className="hover:text-white text-muted transition-colors">Support</a>
           </div>
         </div>
