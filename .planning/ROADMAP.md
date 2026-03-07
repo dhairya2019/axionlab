@@ -74,7 +74,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Every code block in a post has a working copy-to-clipboard button that copies the code text to the system clipboard
   2. An MDX file using `<Info>`, `<Warning>`, or `<Tip>` renders styled callout boxes in the AXIONLAB design language
   3. At the bottom of any post (when 3 or more posts exist), previous and next post links appear and navigate correctly
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 04-01-PLAN.md — Copy-to-clipboard buttons (rehype plugins + CopyButton component) + callout components (Info, Warning, Tip)
+- [ ] 04-02-PLAN.md — Prev/next post navigation (getAdjacentPosts + PostNavigation component + 2 additional seed posts)
 
 ## Progress
 
