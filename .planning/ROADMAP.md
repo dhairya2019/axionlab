@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs (completed 2026-03-07)
 - [x] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering (completed 2026-03-08)
-- [ ] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility
+- [x] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility (completed 2026-03-08)
 - [ ] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation
 
 ## Phase Details
@@ -62,9 +62,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `/robots.txt` is present and allows all crawlers
   4. Social sharing a blog post URL on LinkedIn or X renders the correct OG title, description, and image
 **Plans**: 2 plans
-Plans:
-- [ ] 03-01-PLAN.md — Root layout metadata (metadataBase, title template, OG/Twitter) + robots.ts + static metadata for 5 Server Component pages
-- [ ] 03-02-PLAN.md — Client page refactors (Home + Initiate extract to client components) + metadata exports + build verification
+**Plans**: 2 plans
+- [x] 03-01-PLAN.md — Root layout metadata (metadataBase, title template, OG/Twitter) + robots.ts + static metadata for 5 Server Component pages
+- [x] 03-02-PLAN.md — Client page refactors (Home + Initiate extract to client components) + metadata exports + build verification
 
 ### Phase 4: Blog Enhancements
 **Goal**: The blog reading experience is polished — code blocks have copy-to-clipboard, custom callout components are available for authors, and readers can navigate between posts
@@ -85,5 +85,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
 | 2. Blog Infrastructure | 4/4 | Complete | 2026-03-08 |
-| 3. SEO and Metadata | 0/2 | Not started | - |
+| 3. SEO and Metadata | 2/2 | Complete | 2026-03-08 |
 | 4. Blog Enhancements | 0/TBD | Not started | - |

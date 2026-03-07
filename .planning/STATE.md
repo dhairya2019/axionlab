@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-08T20:00:00.000Z"
+last_updated: "2026-03-08T21:00:00.000Z"
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 9
-  completed_plans: 9
+  total_phases: 3
+  completed_phases: 3
+  total_plans: 11
+  completed_plans: 11
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
-**Current focus:** Phase 2 complete and self-verified — Ready for Phase 3 (SEO and Metadata)
+**Current focus:** Phase 3 complete and self-verified — Ready for Phase 4 (Blog Enhancements)
 
 ## Current Position
 
-Phase: 2 of 4 (Blog Infrastructure) — COMPLETE
-Plan: 4 of 4 in current phase — COMPLETE (self-verified 2026-03-08)
-Status: Phase 2 complete — ready to begin Phase 3
-Last activity: 2026-03-08 — Self-verified blog listing, post pages, syntax highlighting, tag filtering, sitemap, 404
+Phase: 3 of 4 (SEO and Metadata) — COMPLETE
+Plan: 2 of 2 in current phase — COMPLETE (self-verified 2026-03-08)
+Status: Phase 3 complete — ready to begin Phase 4
+Last activity: 2026-03-08 — Self-verified all page titles, OG tags, robots.txt, visual rendering
 
-Progress: [████████░░] 80%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 1.7 min
-- Total execution time: 0.26 hours
+- Total plans completed: 11
+- Average duration: 1.6 min
+- Total execution time: 0.29 hours
 
 **By Phase:**
 
@@ -42,10 +42,11 @@ Progress: [████████░░] 80%
 |-------|-------|-------|----------|
 | 01-nextjs-migration-foundation | 5 | 17 min | 3.4 min |
 | 02-blog-infrastructure | 4 | 10 min | 2.5 min |
+| 03-seo-and-metadata | 2 | 4 min | 2.0 min |
 
 **Recent Trend:**
-- Last 4 plans: 02-01 (3 min), 02-02 (1 min), 02-03 (1 min), 02-04 (5 min)
-- Trend: Steady — 02-04 included full build + visual verification
+- Last 4 plans: 02-03 (1 min), 02-04 (5 min), 03-01 (2 min), 03-02 (2 min)
+- Trend: Steady — SEO phase was lightweight due to strong foundation
 
 *Updated after each plan completion*
 
@@ -82,6 +83,11 @@ Recent decisions affecting current work:
 - [02-03]: params is Promise<{slug: string}> in Next.js 16 — must await before accessing slug
 - [02-03]: Dynamic MDX import uses @/content/blog/${slug}.mdx path alias
 - [02-04]: Sitemap uses https://axionlab.in as BASE_URL, /insights has changeFrequency: 'weekly'
+- [03-01]: metadataBase set to https://axionlab.in — resolves all relative OG URLs to absolute
+- [03-01]: OpenGraph shallow merge — each page's openGraph must be self-contained (child replaces parent entirely)
+- [03-01]: Title template '%s | AXIONLAB' — child pages just set string title, template adds suffix
+- [03-02]: Home page uses title: { absolute: '...' } to bypass template — brand already in title
+- [03-02]: Client component extraction pattern — 'use client' pages split to components/ for metadata export capability
 
 ### Pending Todos
 
@@ -96,11 +102,9 @@ None.
 - [Phase 2 risk RESOLVED]: Turbopack + rehype-pretty-code — confirmed incompatible, --webpack used for both dev and build
 - [Phase 2 risk RESOLVED]: API route chat.js unstable gemini-3-flash-preview model replaced with configurable GEMINI_MODEL env var defaulting to gemini-2.0-flash
 - [Note]: Pages using motion.* must declare 'use client' — framer-motion v12 breaking change from v10/v11
-- [Note for Phase 3]: Sitemap already created in Phase 2 (02-04) — Phase 3 should focus on per-page metadata, robots.txt, and OG images
-- [Note for Phase 3]: Blog post pages already have generateMetadata with OG/Twitter — Phase 3 needs marketing page metadata only
 
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed all 4 Phase 2 plans. Blog infrastructure fully operational and self-verified. Ready for Phase 3.
+Stopped at: Completed all 2 Phase 3 plans. SEO metadata fully operational and self-verified. Ready for Phase 4.
 Resume file: None
