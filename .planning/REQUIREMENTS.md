@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Migration Foundation
 
-- [ ] **MIG-01**: Site builds and runs on Next.js App Router (replaces Vite + hash routing)
+- [x] **MIG-01**: Site builds and runs on Next.js App Router (replaces Vite + hash routing)
 - [ ] **MIG-02**: Tailwind CSS processes via PostCSS with unified color config (#080808 background)
 - [ ] **MIG-03**: Fonts load via next/font (Inter + Inter Tight) with zero layout shift
-- [ ] **MIG-04**: vercel.json updated for Next.js framework (not Vite)
+- [x] **MIG-04**: vercel.json updated for Next.js framework (not Vite)
 - [ ] **MIG-05**: Legacy files cleaned up (index.html, index.tsx, vite configs, unused components)
 
 ### Page Routing
@@ -97,10 +97,10 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MIG-01 | Phase 1 | Pending |
+| MIG-01 | Phase 1 | Complete |
 | MIG-02 | Phase 1 | Pending |
 | MIG-03 | Phase 1 | Pending |
-| MIG-04 | Phase 1 | Pending |
+| MIG-04 | Phase 1 | Complete |
 | MIG-05 | Phase 1 | Pending |
 | RTG-01 | Phase 1 | Pending |
 | RTG-02 | Phase 1 | Pending |
