@@ -17,17 +17,17 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Page Routing
 
-- [ ] **RTG-01**: All 7 pages accessible at clean URLs (/philosophy, /capabilities, /work, /insights, /careers, /initiate)
-- [ ] **RTG-02**: Navigation (Nav component) uses next/link with usePathname for active state
-- [ ] **RTG-03**: Footer uses next/link for internal navigation
+- [x] **RTG-01**: All 7 pages accessible at clean URLs (/philosophy, /capabilities, /work, /insights, /careers, /initiate)
+- [x] **RTG-02**: Navigation (Nav component) uses next/link with usePathname for active state
+- [x] **RTG-03**: Footer uses next/link for internal navigation
 - [x] **RTG-04**: Old hash URLs (/#/work) redirect to clean URLs (/work) via client-side script
-- [ ] **RTG-05**: Custom 404 page in AXIONLAB design language
+- [x] **RTG-05**: Custom 404 page in AXIONLAB design language
 
 ### Page Rendering
 
-- [ ] **RND-01**: Static pages (Philosophy, Capabilities, Work, Careers) render as Server Components
-- [ ] **RND-02**: Interactive pages (Home, Initiate) use "use client" with Framer Motion wrappers
-- [ ] **RND-03**: Chatbot component works as client component with existing /api/chat endpoint
+- [x] **RND-01**: Static pages (Philosophy, Capabilities, Work, Careers) render as Server Components
+- [x] **RND-02**: Interactive pages (Home, Initiate) use "use client" with Framer Motion wrappers
+- [x] **RND-03**: Chatbot component works as client component with existing /api/chat endpoint
 - [x] **RND-04**: Root layout (app/layout.tsx) wraps all pages with Nav, Chatbot, Footer
 
 ### SEO
@@ -102,14 +102,14 @@ Deferred to future release. Tracked but not in current roadmap.
 | MIG-03 | Phase 1 | Complete |
 | MIG-04 | Phase 1 | Complete |
 | MIG-05 | Phase 1 | Pending |
-| RTG-01 | Phase 1 | Pending |
-| RTG-02 | Phase 1 | Pending |
-| RTG-03 | Phase 1 | Pending |
+| RTG-01 | Phase 1 | Complete |
+| RTG-02 | Phase 1 | Complete |
+| RTG-03 | Phase 1 | Complete |
 | RTG-04 | Phase 1 | Complete |
-| RTG-05 | Phase 1 | Pending |
-| RND-01 | Phase 1 | Pending |
-| RND-02 | Phase 1 | Pending |
-| RND-03 | Phase 1 | Pending |
+| RTG-05 | Phase 1 | Complete |
+| RND-01 | Phase 1 | Complete |
+| RND-02 | Phase 1 | Complete |
+| RND-03 | Phase 1 | Complete |
 | RND-04 | Phase 1 | Complete |
 | API-01 | Phase 1 | Complete |
 | API-02 | Phase 1 | Complete |
