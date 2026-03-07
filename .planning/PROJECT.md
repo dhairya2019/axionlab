@@ -1,80 +1,87 @@
-# AXIONLAB Website Migration
+# AXIONLAB Website
 
 ## What This Is
 
-AXIONLAB is an independent systems engineering lab website currently running as a React 19 + Vite SPA with hash-based client-side routing. The site showcases services, portfolio, philosophy, and provides AI-powered chat and contact forms. This project migrates it to Next.js App Router for SEO-friendly multi-page routing and adds an MDX-based blogging system.
+AXIONLAB is an independent systems engineering lab website built on Next.js 16 App Router with an MDX-based blog system. The site showcases services, portfolio, philosophy, and provides AI-powered chat and contact forms. It serves as the primary digital presence for attracting engineering clients and establishing thought leadership.
 
 ## Core Value
 
-Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
+AXIONLAB must rank on the first page of Google for its brand name and target service keywords so potential clients can discover and engage with the lab.
+
+## Current Milestone: v2.0 SEO & Discoverability
+
+**Goal:** Take axionlab.in from zero Google indexing to first-page ranking for brand and niche service keywords.
+
+**Target features:**
+- JSON-LD structured data (Organization, WebSite, Article schemas)
+- Technical SEO fixes (H1 hierarchy, canonical URLs, OG images)
+- SEO-optimised content targeting long-tail keywords
+- Internal linking strategy across service and blog pages
+- Authority signals (meta authorship, social profiles linking)
 
 ## Requirements
 
 ### Validated
 
-- ✓ 7-page website (Home, Philosophy, Capabilities, Work, Insights, Careers, Initiate) — existing
-- ✓ Dark theme design system (#080808 bg, #ff1f3d accent, Inter/Inter Tight fonts, no border-radius) — existing
-- ✓ AI chatbot widget powered by Google Gemini with email dispatch via SendGrid — existing
-- ✓ Contact/initiate form with email notifications — existing
-- ✓ Responsive design with mobile navigation — existing
-- ✓ Framer Motion page animations — existing
-- ✓ Vercel deployment with serverless API routes — existing
+- ✓ Next.js 16 App Router with SSG — v1.0 Phase 1
+- ✓ Per-page SEO metadata (title, description, OG, Twitter) — v1.0 Phase 3
+- ✓ Auto-generated sitemap.xml and robots.txt — v1.0 Phase 3
+- ✓ MDX blog system with 3 posts, tag filtering, reading time — v1.0 Phase 2
+- ✓ Copy-to-clipboard, callout components, post navigation — v1.0 Phase 4
+- ✓ Dark theme design system (#080808 bg, #ff1f3d accent) — v1.0 inherited
+- ✓ AI chatbot + contact form with email notifications — v1.0 inherited
+- ✓ Hash URL backward compatibility — v1.0 Phase 1
+- ✓ Custom 404 page — v1.0 Phase 1
 
 ### Active
 
-- [ ] Migrate from Vite + hash routing to Next.js App Router with file-system routing
-- [ ] Server-side rendering / static generation for all pages
-- [ ] Per-page SEO metadata (title, description, OpenGraph, Twitter cards)
-- [ ] Auto-generated sitemap.xml and robots.txt
-- [ ] MDX-based blog system under /insights with frontmatter support
-- [ ] Blog listing page with cards in AXIONLAB design language
-- [ ] Individual blog post pages with SSG (generateStaticParams)
-- [ ] Tag-based filtering on blog listing
-- [ ] Reading time estimate per post
-- [ ] Blog posts auto-included in sitemap
-- [ ] Custom 404 page matching design system
-- [ ] Backward compatibility for old /#/ hash URLs (redirect to clean URLs)
+- [ ] JSON-LD structured data on all pages
+- [ ] Single H1 per page (currently 3 on homepage)
+- [ ] Canonical URLs on all pages
+- [ ] OG image for social sharing
+- [ ] SEO-optimised blog content (10+ posts targeting niche keywords)
+- [ ] Internal linking between blog posts and service pages
+- [ ] Google Search Console verification setup instructions
+- [ ] Core Web Vitals optimisation
 
 ### Out of Scope
 
-- Visual redesign — keep existing design system intact
-- CMS integration — use file-based MDX for now, CMS can come later
-- Comments on blog posts — not needed for initial launch
-- RSS feed — can add in future milestone
-- Search functionality — not needed with small initial content
-- User authentication — site is public-facing only
-- Analytics integration — separate concern
-- ISR (Incremental Static Regeneration) — rebuild on deploy is fine for Vercel free plan
+- Paid advertising (Google Ads, social ads) — organic only for now
+- Link building outreach — focus on on-site SEO first
+- CMS integration — file-based MDX is sufficient
+- Analytics integration (GA4) — separate concern, not SEO-blocking
+- Multilingual support — English only
+- AMP pages — not needed for modern SEO
 
 ## Context
 
-- **Current state:** React 19 SPA, Vite 7.3.1 build, custom hash-based routing in `index.tsx`, Tailwind via CDN script in `index.html`
-- **Directory structure already matches Next.js conventions:** `app/page.tsx`, `app/philosophy/page.tsx`, `app/work/page.tsx`, etc.
-- **Previous migration attempt reverted:** Commit `6e78273` tried React Router, was reverted in `b4f41ef` — likely due to Tailwind CDN vs PostCSS conflict
-- **Dual Tailwind config:** CDN in `index.html` uses `#080808` background, `tailwind.config.js` uses `#0e0e0e` — CDN values are what users currently see
-- **Legacy files to clean up:** `App.tsx`, `vite.config.js`, `metadata.json`, unused components (Hero.tsx, Navbar.tsx, Portfolio.tsx, Contact.tsx, Clients.tsx, CTA.tsx)
-- **API routes:** `api/chat.js` (Gemini + SendGrid) and `api/send-email.js` (SendGrid) — need migration to Next.js Route Handlers
-- **Blog content:** Mixed — technical articles + company updates + industry commentary
-- **No seed content needed** — build infrastructure first, add posts later
-- **Codebase map available:** `.planning/codebase/` has full analysis
+- **SEO audit (2026-03-08):** Google has indexed ZERO pages. `site:axionlab.in` returns empty.
+- **Competitors:** axionlab.ai, axionlab.org, axionlabs.com occupy search results for "axionlab"
+- **Technical SEO baseline:** sitemap.xml working (10 URLs), robots.txt correct, meta tags present on all pages
+- **Missing:** JSON-LD structured data, canonical tags, OG images, proper H1 hierarchy
+- **Content gap:** Only 3 blog posts, all generic technical topics competing with AWS/Netflix engineering blogs
+- **Keyword opportunity:** Niche India-specific long-tail keywords have low competition (e.g., "systems engineering consulting India", "commerce infrastructure development")
+- **Domain authority:** Brand new domain, zero backlinks, no Google Search Console setup
 
 ## Constraints
 
-- **Hosting:** Vercel free plan — 100GB bandwidth, 10s serverless timeout, no ISR (use SSG instead)
-- **Tech stack:** Next.js App Router (decision made) — leverages existing `app/` directory structure
-- **Design:** Must preserve existing dark theme, typography, animations, and layout exactly
-- **Blog format:** MDX files in `content/blog/` — file-based, no database or CMS
-- **Deployment:** Zero-downtime migration — Vercel auto-detects Next.js
+- **Hosting:** Vercel free plan — SSG only, no ISR
+- **Budget:** Zero — no paid tools, no paid ads
+- **Design:** Must preserve existing AXIONLAB dark theme exactly
+- **Content format:** MDX files in content/blog/ — no CMS
+- **Timeline:** Indexing takes 2-8 weeks after GSC submission; rankings take 3-6 months for competitive terms
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Next.js over React Router | SSR/SSG built-in, metadata API, existing app/ structure matches, native Vercel support | — Pending |
-| MDX over CMS for blog | Simpler, no external dependencies, version-controlled content, free | — Pending |
-| SSG over ISR for blog | Vercel free plan limitations, rebuild-on-deploy sufficient for low publish frequency | — Pending |
-| Tailwind via PostCSS over CDN | Required for Next.js, eliminates dual config, proper build-time processing | — Pending |
-| next/font over Google Fonts CDN | Self-hosted, zero layout shift, better performance | — Pending |
+| Next.js over React Router | SSR/SSG, metadata API, Vercel native | ✓ Good |
+| MDX over CMS for blog | Simpler, free, version-controlled | ✓ Good |
+| SSG over ISR | Vercel free plan, rebuild-on-deploy sufficient | ✓ Good |
+| Tailwind v4 PostCSS over CDN | Eliminates dual config, proper build-time | ✓ Good |
+| next/font over Google Fonts CDN | Self-hosted, zero CLS | ✓ Good |
+| Target niche long-tail keywords over head terms | Zero DA site can't compete with AWS/Netflix on "distributed systems" — India-specific service keywords have low competition | — Pending |
+| JSON-LD over microdata | Industry standard, easier to maintain, Google recommended | — Pending |
 
 ---
-*Last updated: 2026-03-07 after initialization*
+*Last updated: 2026-03-08 after v2.0 milestone start*
