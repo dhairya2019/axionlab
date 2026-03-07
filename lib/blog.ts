@@ -54,3 +54,21 @@ export function getPostBySlug(slug: string): PostMeta {
     readingTime: readingTimeText,
   }
 }
+
+export function getAdjacentPosts(
+  slug: string,
+  posts?: PostMeta[]
+): { prev: PostMeta | null; next: PostMeta | null } {
+  const allPosts = posts ?? getAllPosts()
+  const index = allPosts.findIndex(p => p.slug === slug)
+
+  if (index === -1) return { prev: null, next: null }
+
+  // allPosts is sorted newest-first:
+  // index + 1 = older post (previous)
+  // index - 1 = newer post (next)
+  return {
+    prev: index < allPosts.length - 1 ? allPosts[index + 1] : null,
+    next: index > 0 ? allPosts[index - 1] : null,
+  }
+}

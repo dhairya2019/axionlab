@@ -1,6 +1,9 @@
+import React from 'react'
 import type { MDXComponents } from 'mdx/types'
 import Image, { type ImageProps } from 'next/image'
 import Link from 'next/link'
+import { CopyButton } from '@/components/blog/CopyButton'
+import { Info, Warning, Tip } from '@/components/blog/callouts'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -32,10 +35,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       }
       return <code {...props}>{children}</code>
     },
-    pre: ({ children, ...props }) => (
-      <pre className="bg-surface p-4 overflow-x-auto my-6 text-sm" {...props}>
-        {children}
-      </pre>
+    pre: ({ children, raw, ...props }: React.ComponentPropsWithoutRef<'pre'> & { raw?: string }) => (
+      <div className="relative group my-6">
+        <pre className="bg-surface p-4 overflow-x-auto text-sm" {...props}>
+          {children}
+        </pre>
+        {raw != null && <CopyButton text={raw} />}
+      </div>
     ),
     a: ({ href, children }) => {
       const isInternal = href?.startsWith('/') || href?.startsWith('#')
@@ -65,6 +71,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </blockquote>
     ),
+    Info,
+    Warning,
+    Tip,
     ...components,
   }
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import { getAllPosts, getPostBySlug, getAdjacentPosts } from '@/lib/blog'
+import { PostNavigation } from '@/components/blog/PostNavigation'
 
 export const dynamicParams = false
 
@@ -41,7 +42,11 @@ export default async function BlogPost({
 }) {
   const { slug } = await params
   const post = getPostBySlug(slug)
+  const allPosts = getAllPosts()
   const { default: Post } = await import(`@/content/blog/${slug}.mdx`)
+
+  // BLE-03: only show navigation when 3+ posts exist
+  const adjacent = allPosts.length >= 3 ? getAdjacentPosts(slug, allPosts) : { prev: null, next: null }
 
   return (
     <article className="max-w-3xl mx-auto px-6 pt-40 pb-40">
@@ -65,6 +70,7 @@ export default async function BlogPost({
       <div className="prose prose-invert max-w-none">
         <Post />
       </div>
+      <PostNavigation prev={adjacent.prev} next={adjacent.next} />
     </article>
   )
 }

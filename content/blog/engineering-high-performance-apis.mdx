@@ -1,0 +1,37 @@
+---
+title: "Engineering High-Performance APIs"
+date: "2026-02-15"
+description: "Design principles for building APIs that handle millions of requests with sub-100ms latency at scale."
+tags: ["systems", "performance"]
+author: "AXIONLAB"
+---
+
+## The Latency Problem
+
+Most API performance issues trace back to architectural decisions made in the first week. By the time latency becomes visible, the patterns are baked into the codebase.
+
+### Connection Pooling
+
+Database connections are expensive to establish. A well-configured pool eliminates this overhead:
+
+```typescript
+const pool = createPool({
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+})
+```
+
+### Response Compression
+
+Every byte matters at scale. Enable compression at the edge, not the origin:
+
+> The fastest code is the code that never runs. The fastest bytes are the bytes that never transfer.
+
+### Caching Strategies
+
+Layer your caches: CDN → application → database query cache. Each layer absorbs a different access pattern.
+
+- **CDN**: Static responses, TTL-based invalidation
+- **Application**: Computed results, LRU eviction
+- **Query cache**: Parameterized queries, write-through invalidation
