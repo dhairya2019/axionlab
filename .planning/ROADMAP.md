@@ -46,7 +46,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Code blocks in posts render with syntax highlighting; no JavaScript is shipped to the client for highlighting
   4. Clicking a tag on the listing page filters visible posts to only those with that tag, without a page reload
   5. Accessing /insights/a-nonexistent-slug returns a 404 page (dynamicParams = false is enforced)
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 02-01-PLAN.md — MDX build system + content infrastructure (packages, next.config.mjs, lib/blog.ts, mdx-components.tsx, typography, seed post)
+- [ ] 02-02-PLAN.md — Blog listing page with tag filtering (PostCard, TagFilter, app/insights/page.tsx)
+- [ ] 02-03-PLAN.md — Individual post pages with SSG and per-post SEO (app/insights/[slug]/page.tsx, generateStaticParams, generateMetadata)
+- [ ] 02-04-PLAN.md — Sitemap + build verification + visual sign-off (app/sitemap.ts, next build --webpack, human verify)
 
 ### Phase 3: SEO and Metadata
 **Goal**: Every page has unique, correct SEO metadata (title, description, OpenGraph, Twitter cards); /sitemap.xml includes all pages and blog posts with dates; /robots.txt allows all crawlers; old hash URLs redirect to clean paths
@@ -77,6 +81,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
-| 2. Blog Infrastructure | 0/TBD | Not started | - |
+| 2. Blog Infrastructure | 0/4 | Planned | - |
 | 3. SEO and Metadata | 0/TBD | Not started | - |
 | 4. Blog Enhancements | 0/TBD | Not started | - |
