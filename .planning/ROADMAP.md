@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs (completed 2026-03-07)
 - [x] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering (completed 2026-03-08)
 - [x] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility (completed 2026-03-08)
-- [ ] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation
+- [x] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation (completed 2026-03-08)
 
 ## Phase Details
 
@@ -75,8 +75,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. An MDX file using `<Info>`, `<Warning>`, or `<Tip>` renders styled callout boxes in the AXIONLAB design language
   3. At the bottom of any post (when 3 or more posts exist), previous and next post links appear and navigate correctly
 **Plans**: 2 plans
-- [ ] 04-01-PLAN.md — Copy-to-clipboard buttons (rehype plugins + CopyButton component) + callout components (Info, Warning, Tip)
-- [ ] 04-02-PLAN.md — Prev/next post navigation (getAdjacentPosts + PostNavigation component + 2 additional seed posts)
+- [x] 04-01-PLAN.md — Copy-to-clipboard buttons (rehype plugins + CopyButton component) + callout components (Info, Warning, Tip)
+- [x] 04-02-PLAN.md — Prev/next post navigation (getAdjacentPosts + PostNavigation component + 2 additional seed posts)
 
 ## Progress
 
@@ -88,4 +88,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
 | 2. Blog Infrastructure | 4/4 | Complete | 2026-03-08 |
 | 3. SEO and Metadata | 2/2 | Complete | 2026-03-08 |
-| 4. Blog Enhancements | 0/TBD | Not started | - |
+| 4. Blog Enhancements | 2/2 | Complete | 2026-03-08 |

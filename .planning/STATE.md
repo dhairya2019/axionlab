@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-08T21:00:00.000Z"
+status: complete
+last_updated: "2026-03-08T22:00:00.000Z"
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 11
-  completed_plans: 11
+  total_phases: 4
+  completed_phases: 4
+  total_plans: 13
+  completed_plans: 13
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** Every page must be server-rendered with proper meta tags and crawlable URLs so search engines can discover and index AXIONLAB's content.
-**Current focus:** Phase 3 complete and self-verified — Ready for Phase 4 (Blog Enhancements)
+**Current focus:** ALL PHASES COMPLETE — Milestone v1.0 achieved
 
 ## Current Position
 
-Phase: 3 of 4 (SEO and Metadata) — COMPLETE
+Phase: 4 of 4 (Blog Enhancements) — COMPLETE
 Plan: 2 of 2 in current phase — COMPLETE (self-verified 2026-03-08)
-Status: Phase 3 complete — ready to begin Phase 4
-Last activity: 2026-03-08 — Self-verified all page titles, OG tags, robots.txt, visual rendering
+Status: All 4 phases complete — milestone v1.0 ready for deployment
+Last activity: 2026-03-08 — Self-verified copy buttons, callout components, post navigation
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 1.6 min
-- Total execution time: 0.29 hours
+- Total plans completed: 13
+- Average duration: 1.8 min
+- Total execution time: 0.39 hours
 
 **By Phase:**
 
@@ -43,10 +43,11 @@ Progress: [█████████░] 90%
 | 01-nextjs-migration-foundation | 5 | 17 min | 3.4 min |
 | 02-blog-infrastructure | 4 | 10 min | 2.5 min |
 | 03-seo-and-metadata | 2 | 4 min | 2.0 min |
+| 04-blog-enhancements | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 4 plans: 02-03 (1 min), 02-04 (5 min), 03-01 (2 min), 03-02 (2 min)
-- Trend: Steady — SEO phase was lightweight due to strong foundation
+- Last 4 plans: 03-01 (2 min), 03-02 (2 min), 04-01 (3 min), 04-02 (2 min)
+- Trend: Steady — 04-01 required debugging rehype-pretty-code figure-wrapping behavior
 
 *Updated after each plan completion*
 
@@ -88,6 +89,12 @@ Recent decisions affecting current work:
 - [03-01]: Title template '%s | AXIONLAB' — child pages just set string title, template adds suffix
 - [03-02]: Home page uses title: { absolute: '...' } to bypass template — brand already in title
 - [03-02]: Client component extraction pattern — 'use client' pages split to components/ for metadata export capability
+- [04-01]: Single post-RPC rehype plugin (addRawToCodeBlocks) instead of pre/post pattern — RPC v0.14+ wraps in <figure> and replaces node properties, breaking the documented preProcess/postProcess approach
+- [04-01]: extractText() recursively walks tokenized spans to reconstruct raw code — more robust than storing on nodes that get replaced
+- [04-01]: CopyButton uses opacity-0 group-hover:opacity-100 — hidden until hover, keyboard accessible via focus:opacity-100
+- [04-01]: Callouts use not-prose to isolate from typography plugin prose margins
+- [04-02]: getAdjacentPosts accepts optional pre-fetched posts array to avoid double filesystem read
+- [04-02]: Navigation gated behind allPosts.length >= 3 per BLE-03 success criterion
 
 ### Pending Todos
 
@@ -101,10 +108,11 @@ None.
 - [Phase 1 risk RESOLVED]: next build succeeded — all 7 pages + 2 API routes compile
 - [Phase 2 risk RESOLVED]: Turbopack + rehype-pretty-code — confirmed incompatible, --webpack used for both dev and build
 - [Phase 2 risk RESOLVED]: API route chat.js unstable gemini-3-flash-preview model replaced with configurable GEMINI_MODEL env var defaulting to gemini-2.0-flash
+- [Phase 4 risk RESOLVED]: rehype-pretty-code v0.14+ figure-wrapping breaks preProcess/postProcess pattern — solved with single post-RPC extractText plugin
 - [Note]: Pages using motion.* must declare 'use client' — framer-motion v12 breaking change from v10/v11
 
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed all 2 Phase 3 plans. SEO metadata fully operational and self-verified. Ready for Phase 4.
+Stopped at: All 4 phases complete. Milestone v1.0 fully implemented and self-verified. Ready for deployment.
 Resume file: None
