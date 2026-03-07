@@ -39,9 +39,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### API Routes
 
-- [ ] **API-01**: /api/chat migrated to Next.js Route Handler (app/api/chat/route.ts)
-- [ ] **API-02**: /api/send-email migrated to Next.js Route Handler (app/api/send-email/route.ts)
-- [ ] **API-03**: Client-side fetch URLs unchanged — chatbot and contact form work without frontend changes
+- [x] **API-01**: /api/chat migrated to Next.js Route Handler (app/api/chat/route.ts)
+- [x] **API-02**: /api/send-email migrated to Next.js Route Handler (app/api/send-email/route.ts)
+- [x] **API-03**: Client-side fetch URLs unchanged — chatbot and contact form work without frontend changes
 
 ### Blog Infrastructure
 
@@ -111,9 +111,9 @@ Deferred to future release. Tracked but not in current roadmap.
 | RND-02 | Phase 1 | Pending |
 | RND-03 | Phase 1 | Pending |
 | RND-04 | Phase 1 | Pending |
-| API-01 | Phase 1 | Pending |
-| API-02 | Phase 1 | Pending |
-| API-03 | Phase 1 | Pending |
+| API-01 | Phase 1 | Complete |
+| API-02 | Phase 1 | Complete |
+| API-03 | Phase 1 | Complete |
 | BLG-01 | Phase 2 | Pending |
 | BLG-02 | Phase 2 | Pending |
 | BLG-03 | Phase 2 | Pending |
