@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://axionlab.in/sitemap.xml',
+    sitemap: 'https://www.axionlab.in/sitemap.xml',
   }
 }

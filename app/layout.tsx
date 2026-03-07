@@ -20,7 +20,7 @@ const interTight = Inter_Tight({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://axionlab.in'),
+  metadataBase: new URL('https://www.axionlab.in'),
   title: {
     template: '%s | AXIONLAB',
     default: 'AXIONLAB | Engineering for the obsessed.',
