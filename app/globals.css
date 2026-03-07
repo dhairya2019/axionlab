@@ -1,29 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800;900&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  /* CANONICAL VALUES FROM index.html CDN CONFIG — not tailwind.config.js */
+  --color-background: #080808;
+  --color-accent: #ff1f3d;
+  --color-muted: #666666;
+  --color-surface: #111111;
 
-:root {
-  --background: #0e0e0e;
-  --foreground: #ffffff;
+  /* Font families — wired to CSS vars from next/font in layout.tsx */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-condensed: var(--font-inter-tight), sans-serif;
+
+  /* Custom tokens */
+  --letter-spacing-tighter: -0.04em;
+  --radius-none: 0px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3, h4 {
-  font-family: 'Inter Tight', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
-}
-
+/* Global resets from index.html <style> block — must be preserved */
 * {
   border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 ::selection {
@@ -33,4 +29,18 @@ h1, h2, h3, h4 {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* glass-panel override from index.html — prevents gradient backgrounds */
+.glass-panel,
+.bg-gradient-to-br,
+.bg-gradient-to-r,
+.bg-gradient-to-t {
+  background: #111111 !important;
+  backdrop-filter: none !important;
+}
+
+/* fluid-heading from index.html */
+.fluid-heading {
+  font-size: clamp(2.5rem, 9vw, 10rem);
 }
