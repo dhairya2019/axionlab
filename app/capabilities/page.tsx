@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Capabilities | AXIONLAB',
     description: 'Commerce systems, platform engineering, AI agent orchestration, and data infrastructure. Full-stack systems architecture.',
   },
+  alternates: { canonical: '/capabilities' },
 }
 
 export default function Capabilities() {

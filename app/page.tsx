@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'AXIONLAB | Engineering for the obsessed.',
     description: 'Independent systems engineering lab designing commerce infrastructure, AI agent systems, and high-performance applications.',
   },
+  alternates: { canonical: '/' },
 }
 
 export default function Home() {

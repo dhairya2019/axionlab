@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Initiate | AXIONLAB',
     description: 'Start a project with AXIONLAB. Define your architecture requirements, scope, and timeline.',
   },
+  alternates: { canonical: '/initiate' },
 }
 
 export default function Initiate() {

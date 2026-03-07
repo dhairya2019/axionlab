@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getAllPosts, getPostBySlug, getAdjacentPosts } from '@/lib/blog'
 import { PostNavigation } from '@/components/blog/PostNavigation'
+import { articleJsonLd } from '@/lib/jsonLd'
 
 export const dynamicParams = false
 
@@ -32,6 +33,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.description,
     },
+    alternates: { canonical: `/insights/${slug}` },
   }
 }
 
@@ -50,6 +52,17 @@ export default async function BlogPost({
 
   return (
     <article className="max-w-3xl mx-auto px-6 pt-40 pb-40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd({
+          title: post.title,
+          description: post.description,
+          date: post.date,
+          slug: post.slug,
+          author: post.author,
+          tags: post.tags,
+        })) }}
+      />
       {/* Post header */}
       <header className="mb-16 border-t border-white/10 pt-8">
         <p className="text-[10px] text-accent font-black uppercase tracking-[0.6em] mb-6">

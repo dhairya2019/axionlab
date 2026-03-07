@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { Chatbot } from '@/components/Chatbot'
+import { organizationJsonLd, webSiteJsonLd } from '@/lib/jsonLd'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -51,6 +52,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })();
           `
         }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd()) }}
+        />
         <Nav />
         <main className="min-h-screen">
           {children}

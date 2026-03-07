@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Careers | AXIONLAB',
     description: 'Join the AXIONLAB engineering team. We hire selectively for systems thinking, technical depth, and obsessive craft.',
   },
+  alternates: { canonical: '/careers' },
 }
 
 export default function Careers() {

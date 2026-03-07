@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Philosophy | AXIONLAB',
     description: 'We embed directly into the technical and cultural layers of an organization. Systems engineered from within the ecosystems they serve.',
   },
+  alternates: { canonical: '/philosophy' },
 }
 
 export default function Philosophy() {

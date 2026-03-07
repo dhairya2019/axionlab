@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Work | AXIONLAB',
     description: 'System classifications and case studies. AI agent orchestration, commerce infrastructure, and platform engineering projects.',
   },
+  alternates: { canonical: '/work' },
 }
 
 export default function Work() {

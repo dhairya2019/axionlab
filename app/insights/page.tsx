@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Insights | AXIONLAB',
     description: 'Technical dispatches on systems engineering, AI infrastructure, commerce architecture, and platform design.',
   },
+  alternates: { canonical: '/insights' },
 }
 
 export default function InsightsPage() {

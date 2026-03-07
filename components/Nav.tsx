@@ -42,9 +42,9 @@ export default function Nav() {
         } px-6 md:px-12 flex justify-between items-center h-20 md:h-24`}
       >
         <Link href="/" className="group relative z-50 flex items-center">
-          <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase">
+          <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">
             AXIONLAB
-          </h1>
+          </span>
         </Link>
 
         {/* Desktop Links */}
@@ -86,7 +86,7 @@ export default function Nav() {
       >
         <div className="flex flex-col min-h-full">
           <div className="flex justify-between items-center px-6 h-20 border-b border-white/10">
-            <h1 className="text-xl font-black tracking-tighter uppercase">AXIONLAB</h1>
+            <span className="text-xl font-black tracking-tighter uppercase">AXIONLAB</span>
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="text-white p-2"
