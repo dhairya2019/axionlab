@@ -1,8 +1,8 @@
-# Roadmap: AXIONLAB Website Migration
+# Roadmap: AXIONLAB Website
 
 ## Overview
 
-This roadmap migrates the AXIONLAB website from a Vite SPA with hash-based routing to Next.js App Router with SSR/SSG, then adds an MDX-based Insights blog. The work proceeds in strict dependency order — the previous migration attempt was reverted due to foundation issues, so Phase 1 must be complete and verified before any blog work begins. Phases 1-3 restore and enhance the existing site; Phase 4 adds polish to the blog once it is live.
+This roadmap covers two milestones. **v1.0 (Phases 1-4)** migrated AXIONLAB from a Vite SPA to Next.js App Router with an MDX blog — fully complete. **v2.0 (Phases 5-7)** takes the site from zero Google indexing to first-page ranking for brand and niche service keywords through structured data, content scale, internal linking, and Core Web Vitals optimisation.
 
 ## Phases
 
@@ -12,10 +12,18 @@ This roadmap migrates the AXIONLAB website from a Vite SPA with hash-based routi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
+### v1.0: Website Foundation (Complete)
+
 - [x] **Phase 1: Next.js Migration Foundation** - Replace Vite + hash routing with Next.js App Router; all existing pages, routes, and APIs work at clean URLs (completed 2026-03-07)
 - [x] **Phase 2: Blog Infrastructure** - MDX-based Insights blog at /insights with SSG, syntax highlighting, and tag filtering (completed 2026-03-08)
 - [x] **Phase 3: SEO and Metadata** - Per-page metadata, sitemap.xml, robots.txt, and hash URL backward compatibility (completed 2026-03-08)
 - [x] **Phase 4: Blog Enhancements** - Code copy buttons, custom callout components, and prev/next post navigation (completed 2026-03-08)
+
+### v2.0: SEO & Discoverability
+
+- [ ] **Phase 5: Technical SEO Foundation** - JSON-LD structured data, single H1 per page, canonical URLs, OG image, and GSC setup instructions enable Google to correctly index and understand all pages
+- [ ] **Phase 6: Content & Internal Linking** - 10+ SEO-optimised blog posts targeting niche long-tail keywords, with descriptive anchor text and alt text throughout, create a crawlable content graph that builds topical authority
+- [ ] **Phase 7: Performance SEO** - Core Web Vitals pass (LCP under 2.5s, CLS under 0.1) with optimised images and no render-blocking resources so ranking signals are not suppressed by poor page experience scores
 
 ## Phase Details
 
@@ -62,7 +70,6 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `/robots.txt` is present and allows all crawlers
   4. Social sharing a blog post URL on LinkedIn or X renders the correct OG title, description, and image
 **Plans**: 2 plans
-**Plans**: 2 plans
 - [x] 03-01-PLAN.md — Root layout metadata (metadataBase, title template, OG/Twitter) + robots.ts + static metadata for 5 Server Component pages
 - [x] 03-02-PLAN.md — Client page refactors (Home + Initiate extract to client components) + metadata exports + build verification
 
@@ -78,14 +85,52 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 04-01-PLAN.md — Copy-to-clipboard buttons (rehype plugins + CopyButton component) + callout components (Info, Warning, Tip)
 - [x] 04-02-PLAN.md — Prev/next post navigation (getAdjacentPosts + PostNavigation component + 2 additional seed posts)
 
+### Phase 5: Technical SEO Foundation
+**Goal**: Every page on axionlab.in is structurally correct for Google to crawl, understand, and index — JSON-LD schemas tell Google what the site is, canonical tags prevent duplicate content penalties, a single H1 per page signals topic focus, a branded OG image enables social sharing, and the site owner has clear instructions to connect Google Search Console
+**Depends on**: Phase 4
+**Requirements**: TSEO-01, TSEO-02, TSEO-03, TSEO-04, TSEO-05, INDX-01, INDX-02, INDX-03
+**Success Criteria** (what must be TRUE):
+  1. Google's Rich Results Test validates JSON-LD on the homepage (Organization + WebSite schemas) and on any blog post page (Article schema with author, datePublished, headline)
+  2. Viewing page source on any page shows exactly one `<h1>` tag containing the page's primary keyword (e.g. homepage H1 contains "systems engineering")
+  3. Every page response includes a `<link rel="canonical">` pointing to its canonical https://axionlab.in/... URL
+  4. Sharing any axionlab.in URL on Slack, LinkedIn, or X renders the branded OG image with the page title and description
+  5. A site owner following the GSC documentation can complete Search Console verification and submit the sitemap without needing to ask Claude for help
+**Plans**: TBD
+
+### Phase 6: Content & Internal Linking
+**Goal**: axionlab.in has a content graph of 10+ SEO-optimised blog posts that target niche long-tail keywords across six defined clusters, with every post linking into service pages and every service page linking back to related posts — no orphan pages exist and every link uses descriptive anchor text with keyword-rich alt text on all images
+**Depends on**: Phase 5
+**Requirements**: CSEO-01, CSEO-02, CSEO-03, CSEO-04, CSEO-05, CSEO-06, TSEO-06, TSEO-07, INDX-04
+**Success Criteria** (what must be TRUE):
+  1. The /insights listing page shows 10 or more published posts, each with a unique target keyword visible in its title and meta description
+  2. Clicking into any blog post shows a 1000+ word article with H2/H3 heading structure and at least one contextual link to a service page (/capabilities, /work, or /philosophy) using descriptive anchor text
+  3. Visiting /capabilities (or /work or /philosophy) shows at least 2 inline links to related blog posts using descriptive anchor text — not "read more" or "click here"
+  4. A crawler following links from the homepage can reach every page on the site within 3 clicks
+  5. Every image in the codebase has a non-empty alt attribute containing a relevant keyword phrase
+**Plans**: TBD
+
+### Phase 7: Performance SEO
+**Goal**: axionlab.in passes Core Web Vitals thresholds on mobile — LCP under 2.5 seconds, CLS under 0.1 — with no render-blocking resources and all images served through next/image so that poor page experience scores do not suppress search rankings
+**Depends on**: Phase 6
+**Requirements**: PERF-01, PERF-02, PERF-03, PERF-04
+**Success Criteria** (what must be TRUE):
+  1. PageSpeed Insights on mobile shows LCP at or below 2.5 seconds for the homepage and any blog post page
+  2. PageSpeed Insights shows CLS at or below 0.1 across homepage, blog listing, and blog post pages
+  3. Chrome DevTools Performance panel shows no render-blocking scripts or stylesheets delaying First Contentful Paint
+  4. Every `<img>` element in the rendered HTML is served through next/image with explicit width and height attributes
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Next.js Migration Foundation | 5/5 | Complete   | 2026-03-07 |
+| 1. Next.js Migration Foundation | 5/5 | Complete | 2026-03-07 |
 | 2. Blog Infrastructure | 4/4 | Complete | 2026-03-08 |
 | 3. SEO and Metadata | 2/2 | Complete | 2026-03-08 |
 | 4. Blog Enhancements | 2/2 | Complete | 2026-03-08 |
+| 5. Technical SEO Foundation | 0/TBD | Not started | - |
+| 6. Content & Internal Linking | 0/TBD | Not started | - |
+| 7. Performance SEO | 0/TBD | Not started | - |
