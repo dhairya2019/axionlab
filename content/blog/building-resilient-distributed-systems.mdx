@@ -1,0 +1,97 @@
+---
+title: "Building Resilient Distributed Systems"
+date: "2026-03-01"
+description: "How AXIONLAB approaches fault isolation, circuit breakers, and graceful degradation in production systems."
+tags: ["systems", "distributed", "reliability"]
+author: "AXIONLAB"
+---
+
+Every system fails. The question is whether failure cascades or stays contained.
+
+At AXIONLAB, we design for **graceful degradation** — the principle that a failing subsystem should reduce capability, not eliminate it. This approach has saved production systems from total outages more times than we can count.
+
+## The Circuit Breaker Pattern
+
+A circuit breaker monitors calls to an external service. When failures exceed a threshold, it "trips" and short-circuits subsequent calls, returning a fallback response instead of waiting for timeouts.
+
+```typescript
+class CircuitBreaker {
+  private failures = 0
+  private lastFailure: number | null = null
+  private state: 'closed' | 'open' | 'half-open' = 'closed'
+
+  constructor(
+    private threshold: number = 5,
+    private resetTimeout: number = 30_000
+  ) {}
+
+  async execute<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+    if (this.state === 'open') {
+      if (Date.now() - (this.lastFailure ?? 0) > this.resetTimeout) {
+        this.state = 'half-open'
+      } else {
+        return fallback
+      }
+    }
+
+    try {
+      const result = await fn()
+      this.reset()
+      return result
+    } catch {
+      this.recordFailure()
+      return fallback
+    }
+  }
+
+  private recordFailure() {
+    this.failures++
+    this.lastFailure = Date.now()
+    if (this.failures >= this.threshold) {
+      this.state = 'open'
+    }
+  }
+
+  private reset() {
+    this.failures = 0
+    this.state = 'closed'
+  }
+}
+```
+
+The key insight is the `half-open` state — after the reset timeout, the breaker allows a single probe request. If it succeeds, the circuit closes. If it fails, the circuit reopens.
+
+## Fault Isolation Boundaries
+
+We structure services around three isolation principles:
+
+1. **Bulkheads** — separate thread pools or connection pools per dependency, so one slow service can't exhaust resources for others
+2. **Timeouts** — every external call has an explicit deadline, never relying on TCP defaults
+3. **Fallbacks** — every critical path has a degraded-but-functional alternative
+
+> The goal is not to prevent failure. It is to prevent failure from becoming catastrophe.
+
+In practice, this means wrapping every `fetch()` call with a circuit breaker and a timeout. The `AbortController` API makes this straightforward:
+
+```typescript
+async function resilientFetch(url: string, options?: RequestInit): Promise<Response> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 5000)
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    return response
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+```
+
+## What We Ship
+
+Every AXIONLAB deployment includes a monitoring dashboard that tracks circuit breaker state across services. When a breaker trips, the on-call engineer sees it within seconds — not minutes.
+
+Read more about our [engineering philosophy](/philosophy) and how we apply these principles across every engagement.

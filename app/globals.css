@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   /* CANONICAL VALUES FROM index.html CDN CONFIG — not tailwind.config.js */
@@ -14,6 +15,24 @@
   /* Custom tokens */
   --letter-spacing-tighter: -0.04em;
   --radius-none: 0px;
+
+  /* Prose typography overrides for AXIONLAB dark theme */
+  --tw-prose-body: #cccccc;
+  --tw-prose-headings: #ffffff;
+  --tw-prose-lead: #999999;
+  --tw-prose-links: #ff1f3d;
+  --tw-prose-bold: #ffffff;
+  --tw-prose-counters: #666666;
+  --tw-prose-bullets: #666666;
+  --tw-prose-hr: rgba(255,255,255,0.1);
+  --tw-prose-quotes: #ffffff;
+  --tw-prose-quote-borders: #ff1f3d;
+  --tw-prose-captions: #666666;
+  --tw-prose-code: #ff1f3d;
+  --tw-prose-pre-code: #cccccc;
+  --tw-prose-pre-bg: #111111;
+  --tw-prose-th-borders: rgba(255,255,255,0.1);
+  --tw-prose-td-borders: rgba(255,255,255,0.08);
 }
 
 /* Global resets from index.html <style> block — must be preserved */
