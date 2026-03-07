@@ -19,8 +19,20 @@ const interTight = Inter_Tight({
 })
 
 export const metadata: Metadata = {
-  title: 'AXIONLAB | Engineering for the obsessed.',
+  metadataBase: new URL('https://axionlab.in'),
+  title: {
+    template: '%s | AXIONLAB',
+    default: 'AXIONLAB | Engineering for the obsessed.',
+  },
   description: 'Independent systems engineering lab designing commerce infrastructure and high-performance applications.',
+  openGraph: {
+    siteName: 'AXIONLAB',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,22 @@
+import type { Metadata } from 'next'
 import { getAllPosts } from '@/lib/blog'
 import { TagFilter } from '@/components/blog/TagFilter'
+
+export const metadata: Metadata = {
+  title: 'Insights',
+  description: 'Technical dispatches on systems engineering, AI infrastructure, commerce architecture, and platform design.',
+  openGraph: {
+    title: 'Insights | AXIONLAB',
+    description: 'Technical dispatches on systems engineering, AI infrastructure, commerce architecture, and platform design.',
+    url: '/insights',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Insights | AXIONLAB',
+    description: 'Technical dispatches on systems engineering, AI infrastructure, commerce architecture, and platform design.',
+  },
+}
 
 export default function InsightsPage() {
   const posts = getAllPosts()

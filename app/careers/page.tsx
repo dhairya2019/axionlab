@@ -1,5 +1,21 @@
-
 import React from "react";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Careers',
+  description: 'Join the AXIONLAB engineering team. We hire selectively for systems thinking, technical depth, and obsessive craft.',
+  openGraph: {
+    title: 'Careers | AXIONLAB',
+    description: 'Join the AXIONLAB engineering team. We hire selectively for systems thinking, technical depth, and obsessive craft.',
+    url: '/careers',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Careers | AXIONLAB',
+    description: 'Join the AXIONLAB engineering team. We hire selectively for systems thinking, technical depth, and obsessive craft.',
+  },
+}
 
 export default function Careers() {
   return (

@@ -1,4 +1,21 @@
 import React from "react";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Work',
+  description: 'System classifications and case studies. AI agent orchestration, commerce infrastructure, and platform engineering projects.',
+  openGraph: {
+    title: 'Work | AXIONLAB',
+    description: 'System classifications and case studies. AI agent orchestration, commerce infrastructure, and platform engineering projects.',
+    url: '/work',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Work | AXIONLAB',
+    description: 'System classifications and case studies. AI agent orchestration, commerce infrastructure, and platform engineering projects.',
+  },
+}
 
 export default function Work() {
   const projects = [

@@ -1,4 +1,21 @@
 import React from "react";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Philosophy',
+  description: 'We embed directly into the technical and cultural layers of an organization. Systems engineered from within the ecosystems they serve.',
+  openGraph: {
+    title: 'Philosophy | AXIONLAB',
+    description: 'We embed directly into the technical and cultural layers of an organization. Systems engineered from within the ecosystems they serve.',
+    url: '/philosophy',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Philosophy | AXIONLAB',
+    description: 'We embed directly into the technical and cultural layers of an organization. Systems engineered from within the ecosystems they serve.',
+  },
+}
 
 export default function Philosophy() {
   return (
